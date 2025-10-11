@@ -14,15 +14,15 @@ public partial class FormMain
         var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click);
         var saveAsMenuItem = new ToolStripMenuItem("Save &As", null, SaveAsMenuItem_Click);
         var exitMenuItem = new ToolStripMenuItem("E&xit", null, ExitMenuItem_Click);
-        fileMenuItem.DropDownItems.AddRange(new ToolStripItem[]
-        {
+        fileMenuItem.DropDownItems.AddRange(
+        [
             newMenuItem,
             openMenuItem,
             saveMenuItem,
             saveAsMenuItem,
             new ToolStripSeparator(),
             exitMenuItem
-        });
+        ]);
         // Edit Menu
         var editMenuItem = new ToolStripMenuItem("&Edit");
         var undoMenuItem = new ToolStripMenuItem("&Undo", null, UndoMenuItem_Click);
@@ -39,19 +39,29 @@ public partial class FormMain
             copyMenuItem,
             pasteMenuItem
         ]);
-        // Help Menu (Placeholder for future implementation)
+        // Tools Menu
+        var toolsMenuItem = new ToolStripMenuItem("&Tools");
+        var optionsMenuItem = new ToolStripMenuItem("&Options", null, OptionsMenuItem_Click);
+        toolsMenuItem.DropDownItems.Add(optionsMenuItem);
+        // Help Menu
         var helpMenuItem = new ToolStripMenuItem("&Help", null, HelpMenuItem_Click);
         // Add Menus to MenuStrip
         menuStripMain.Items.AddRange(
         [
             fileMenuItem,
             editMenuItem,
+            toolsMenuItem,
             helpMenuItem
         ]);
         Controls.Add(menuStripMain);
         menuStripMain.ResumeLayout(false);
         menuStripMain.PerformLayout();
         MainMenuStrip = menuStripMain;
+    }
+
+    private void OptionsMenuItem_Click(object? sender, EventArgs e)
+    {
+        MessageBox.Show("Options are not implemented yet.", "Options", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void HelpMenuItem_Click(object? sender, EventArgs e)
@@ -61,27 +71,27 @@ public partial class FormMain
 
     private void PasteMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Paste is not implemented yet.", "Paste", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void CopyMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Copy is not implemented yet.", "Copy", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void CutMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Cut is not implemented yet.", "Cut", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void RedoMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Redo is not implemented yet.", "Redo", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void UndoMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Undo is not implemented yet.", "Undo", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void ExitMenuItem_Click(object? sender, EventArgs e)
@@ -91,21 +101,21 @@ public partial class FormMain
 
     private void SaveAsMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Save As is not implemented yet.", "Save As", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void SaveMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Save is not implemented yet.", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void OpenMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("Open is not implemented yet.", "Open", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void NewMenuItem_Click(object? sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        MessageBox.Show("New is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 }

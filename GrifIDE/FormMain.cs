@@ -1,8 +1,12 @@
+using Grif;
+
 namespace GrifIDE;
 
 public partial class FormMain : Form
 {
-    private readonly Panel panelMain = new();
+    private Grod grod = new("");
+
+    private Panel panelMain = new();
 
     public FormMain()
     {
@@ -11,7 +15,11 @@ public partial class FormMain : Form
 
     private void FormMain_Load(object sender, EventArgs e)
     {
-        panelMain.Dock = DockStyle.Fill;
+        // Add in reverse order for proper placement
+        panelMain = new Panel
+        {
+            Dock = DockStyle.Fill
+        };
         Controls.Add(panelMain);
         InitEditText();
         InitEditList();

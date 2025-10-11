@@ -1,9 +1,8 @@
-﻿
-namespace GrifIDE;
+﻿namespace GrifIDE;
 
 public partial class FormMain
 {
-    private  ListBox editListBox = new();
+    private ListBox editListBox = new();
 
     private void InitEditList()
     {

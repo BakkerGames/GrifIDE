@@ -9,4 +9,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\GRIF2\Grif\Grif.csproj" />
+  </ItemGroup>
+
 </Project>

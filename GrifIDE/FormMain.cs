@@ -4,7 +4,8 @@ namespace GrifIDE;
 
 public partial class FormMain : Form
 {
-    private Grod grod = new("");
+    private Grod grod = new("base");
+    private Grod grodEdit = new("edit");
 
     private Panel panelMain = new();
 
@@ -25,5 +26,12 @@ public partial class FormMain : Form
         InitEditList();
         InitTreeView();
         InitMenu();
+        var filename = "C:\\Users\\Scott\\source\\repos\\Castlequest_GRIF\\Castlequest.grif";
+        grod = new Grod(Path.GetFileName(filename));
+        var content = Grif.Grif.ReadGrif(filename);
+        grod.AddItems(content);
+        PopulateTreeView(grod);
+        grodEdit.Parent = grod;
+        PopulateEditList(grodEdit);
     }
 }

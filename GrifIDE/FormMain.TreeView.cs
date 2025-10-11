@@ -18,22 +18,21 @@ public partial class FormMain
         };
         panelMain.Controls.Add(treeView);
         treeView.AfterSelect += TreeView_AfterSelect;
-        grod = new Grod("example.grod");
-        grod.Set("@title", "Example Grod File");
-        grod.Set("section1.key1", "Value 1");
-        grod.Set("section1.key2", "Value 2");
-        grod.Set("articles", "the,a,an");
-        PopulateTreeView(grod);
     }
 
     private void TreeView_AfterSelect(object? sender, EventArgs e)
     {
+        editLoading = true;
+        editListBox.ClearSelected();
         editTextBox.Clear();
         if (treeView.SelectedNode != null)
         {
             var selectedKey = treeView.SelectedNode.Name;
-            editTextBox.Text = grod.Get(selectedKey, true);
+            var tempText = grodEdit.Get(selectedKey, true) ?? "";
+            tempText = Dags.PrettyScript(tempText);
+            editTextBox.Text = tempText;
         }
+        editLoading = false;
     }
 
     private void PopulateTreeView(Grod grod)

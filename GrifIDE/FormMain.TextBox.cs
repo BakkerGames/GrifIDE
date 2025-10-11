@@ -4,6 +4,7 @@ namespace GrifIDE;
 
 public partial class FormMain
 {
+    private bool editLoading = false;
     private TextBox editTextBox = new();
 
     private void InitEditText()
@@ -20,7 +21,24 @@ public partial class FormMain
             ForeColor = Color.Lime,
         };
         SetTabWidth(editTextBox, 4);
+        editTextBox.TextChanged += EditTextBox_TextChanged;
         panelMain.Controls.Add(editTextBox);
+    }
+
+    private void EditTextBox_TextChanged(object? sender, EventArgs e)
+    {
+        if (editLoading) return;
+        var selectedKey = treeView.SelectedNode.Name;
+        foreach (var item in editListBox.Items)
+        {
+            if (item.ToString() == selectedKey)
+            {
+                grodEdit.Set(selectedKey, editTextBox.Text);
+                return;
+            }
+        }
+        editListBox.Items.Add(selectedKey);
+        grodEdit.Set(selectedKey, editTextBox.Text);
     }
 
     #region Set Tab Width P/Invoke

@@ -1,4 +1,6 @@
-﻿namespace GrifIDE;
+﻿using Grif;
+
+namespace GrifIDE;
 
 public partial class FormMain
 {
@@ -13,18 +15,38 @@ public partial class FormMain
             Font = new Font("Consolas", 12),
             BackColor = Color.Black,
             ForeColor = Color.Lime,
+            Sorted = true
         };
+        editListBox.SelectedIndexChanged += EditListBox_SelectedIndexChanged;
         panelMain.Controls.Add(editListBox);
-        PopulateEditList();
     }
 
-    private void PopulateEditList()
+    private void EditListBox_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (editListBox.SelectedIndex >= 0)
+        {
+            var selectedKey = editListBox.Items[editListBox.SelectedIndex].ToString();
+            if (selectedKey != null)
+            {
+                editLoading = true;
+                editTextBox.Clear();
+                var tempText = grodEdit.Get(selectedKey, true) ?? "";
+                tempText = Dags.PrettyScript(tempText);
+                editTextBox.Text = tempText;
+                editLoading = false;
+            }
+        }
+    }
+
+    private void PopulateEditList(Grod grodEdit)
     {
         editListBox.SuspendLayout();
         editListBox.Items.Clear();
-        editListBox.Items.Add("Edit Item 1");
-        editListBox.Items.Add("Edit Item 2");
-        editListBox.Items.Add("Edit Item 3");
+        var keys = grodEdit.Keys(false, true);
+        foreach (var key in keys)
+        {
+            editListBox.Items.Add(key);
+        }
         editListBox.ResumeLayout();
     }
 }

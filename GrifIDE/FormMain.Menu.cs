@@ -4,7 +4,7 @@ public partial class FormMain
 {
     private void InitMenu()
     {
-        menuStripMain = new MenuStrip();
+        var menuStripMain = new MenuStrip();
         menuStripMain.SuspendLayout();
         menuStripMain.Dock = DockStyle.Top;
         // File Menu

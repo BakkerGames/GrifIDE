@@ -1,4 +1,5 @@
 using Grif;
+using static Grif.Grif;
 
 namespace GrifIDE;
 
@@ -8,6 +9,14 @@ public partial class FormMain : Form
     private Grod grodEdit = new("edit");
 
     private Panel panelMain = new();
+    private TreeView treeView = new();
+    private ListBox editListBox = new();
+    private TextBox editTextBox = new();
+
+    private string filename = "";
+    private string filenameEdit = "";
+    private bool editLoading = false;
+    private string? currentKey = null;
 
     public FormMain()
     {
@@ -26,11 +35,19 @@ public partial class FormMain : Form
         InitEditList();
         InitTreeView();
         InitMenu();
-        var filename = "C:\\Users\\Scott\\source\\repos\\Castlequest_GRIF\\Castlequest.grif";
-        grod = new Grod(Path.GetFileName(filename));
+        filename = "C:\\Users\\Scott\\source\\repos\\Castlequest_GRIF\\Castlequest.grif";
+        filenameEdit = filename + "edit"; // *.grifedit
+        grod = new Grod(Path.GetFileNameWithoutExtension(filename));
         var content = Grif.Grif.ReadGrif(filename);
         grod.AddItems(content);
         PopulateTreeView(grod);
+        grodEdit.Clear(false);
+        if (File.Exists(filenameEdit))
+        {
+            grodEdit = new Grod(Path.GetFileNameWithoutExtension(filenameEdit) + ".edit");
+            var editContent = ReadGrif(filenameEdit);
+            grodEdit.AddItems(editContent);
+        }
         grodEdit.Parent = grod;
         PopulateEditList(grodEdit);
     }

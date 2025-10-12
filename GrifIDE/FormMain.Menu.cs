@@ -1,4 +1,6 @@
-﻿namespace GrifIDE;
+﻿using Grif;
+
+namespace GrifIDE;
 
 public partial class FormMain
 {
@@ -11,7 +13,7 @@ public partial class FormMain
         var fileMenuItem = new ToolStripMenuItem("&File");
         var newMenuItem = new ToolStripMenuItem("&New", null, NewMenuItem_Click);
         var openMenuItem = new ToolStripMenuItem("&Open", null, OpenMenuItem_Click);
-        var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click);
+        var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click, Keys.Control | Keys.S );
         var saveAsMenuItem = new ToolStripMenuItem("Save &As", null, SaveAsMenuItem_Click);
         var exitMenuItem = new ToolStripMenuItem("E&xit", null, ExitMenuItem_Click);
         fileMenuItem.DropDownItems.AddRange(
@@ -25,19 +27,10 @@ public partial class FormMain
         ]);
         // Edit Menu
         var editMenuItem = new ToolStripMenuItem("&Edit");
-        var undoMenuItem = new ToolStripMenuItem("&Undo", null, UndoMenuItem_Click);
-        var redoMenuItem = new ToolStripMenuItem("&Redo", null, RedoMenuItem_Click);
-        var cutMenuItem = new ToolStripMenuItem("Cu&t", null, CutMenuItem_Click);
-        var copyMenuItem = new ToolStripMenuItem("&Copy", null, CopyMenuItem_Click);
-        var pasteMenuItem = new ToolStripMenuItem("&Paste", null, PasteMenuItem_Click);
+        var formatMenuItem = new ToolStripMenuItem("&Format", null, FormatMenuItem_Click, Keys.F4);
         editMenuItem.DropDownItems.AddRange(
         [
-            undoMenuItem,
-            redoMenuItem,
-            new ToolStripSeparator(),
-            cutMenuItem,
-            copyMenuItem,
-            pasteMenuItem
+            formatMenuItem,
         ]);
         // Tools Menu
         var toolsMenuItem = new ToolStripMenuItem("&Tools");
@@ -59,39 +52,28 @@ public partial class FormMain
         MainMenuStrip = menuStripMain;
     }
 
-    private void OptionsMenuItem_Click(object? sender, EventArgs e)
+    private void NewMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Options are not implemented yet.", "Options", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("New is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
-    private void HelpMenuItem_Click(object? sender, EventArgs e)
+    private void OpenMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Help is not implemented yet.", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("Open is not implemented yet.", "Open", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
-    private void PasteMenuItem_Click(object? sender, EventArgs e)
+    private void SaveMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Paste is not implemented yet.", "Paste", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        if (!string.IsNullOrEmpty(filenameEdit))
+        {
+            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), false);
+            MessageBox.Show($"Saved to {Path.GetFileName(filenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
     }
 
-    private void CopyMenuItem_Click(object? sender, EventArgs e)
+    private void SaveAsMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Copy is not implemented yet.", "Copy", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void CutMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("Cut is not implemented yet.", "Cut", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void RedoMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("Redo is not implemented yet.", "Redo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void UndoMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("Undo is not implemented yet.", "Undo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("Save As is not implemented yet.", "Save As", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
     private void ExitMenuItem_Click(object? sender, EventArgs e)
@@ -99,23 +81,23 @@ public partial class FormMain
         this.Close();
     }
 
-    private void SaveAsMenuItem_Click(object? sender, EventArgs e)
+    private void FormatMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Save As is not implemented yet.", "Save As", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        if (string.IsNullOrEmpty(currentKey)) return;
+        var originalText = grodEdit.Get(currentKey, true) ?? "";
+        var formattedText = Dags.PrettyScript(originalText);
+        editLoading = true;
+        editTextBox.Text = formattedText;
+        editLoading = false;
     }
 
-    private void SaveMenuItem_Click(object? sender, EventArgs e)
+    private void OptionsMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Save is not implemented yet.", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("Options are not implemented yet.", "Options", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
-    private void OpenMenuItem_Click(object? sender, EventArgs e)
+    private void HelpMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Open is not implemented yet.", "Open", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private void NewMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("New is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("Help is not implemented yet.", "Help", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 }

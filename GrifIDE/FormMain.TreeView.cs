@@ -4,14 +4,12 @@ namespace GrifIDE;
 
 public partial class FormMain
 {
-    private TreeView treeView = new();
-
     private void InitTreeView()
     {
         treeView = new TreeView
         {
             Dock = DockStyle.Left,
-            Width = 200,
+            Width = 300,
             Font = new Font("Consolas", 12),
             BackColor = Color.Black,
             ForeColor = Color.Lime,
@@ -27,9 +25,12 @@ public partial class FormMain
         editTextBox.Clear();
         if (treeView.SelectedNode != null)
         {
-            var selectedKey = treeView.SelectedNode.Name;
-            var tempText = grodEdit.Get(selectedKey, true) ?? "";
-            tempText = Dags.PrettyScript(tempText);
+            currentKey = treeView.SelectedNode.Name;
+            var tempText = grodEdit.Get(currentKey, true) ?? "";
+            if (!grodEdit.ContainsKey(currentKey, false))
+            {
+                tempText = Dags.PrettyScript(tempText);
+            }
             editTextBox.Text = tempText;
         }
         editLoading = false;
@@ -44,23 +45,13 @@ public partial class FormMain
         {
             if (key.StartsWith('@'))
             {
-                TreeNode? parentNode = FindNodeByName(treeView.Nodes, "@");
-                if (parentNode == null)
-                {
-                    parentNode = new TreeNode { Name = "@", Text = "@" };
-                    treeView.Nodes.Add(parentNode);
-                }
+                TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "@", "@");
                 parentNode.Nodes.Add(new TreeNode { Name = key, Text = key });
             }
             else if (key.Contains('.'))
             {
                 var parts = key.Split('.');
-                TreeNode? parentNode = FindNodeByName(treeView.Nodes, parts[0]);
-                if (parentNode == null)
-                {
-                    parentNode = new TreeNode { Name = parts[0], Text = parts[0] };
-                    treeView.Nodes.Add(parentNode);
-                }
+                TreeNode parentNode = FindOrCreateNode(treeView.Nodes, parts[0], parts[0]);
                 int index = 1;
                 while (index < parts.Length)
                 {
@@ -88,28 +79,24 @@ public partial class FormMain
             }
             else
             {
-                TreeNode? parentNode = FindNodeByName(treeView.Nodes, "...");
-                if (parentNode == null)
-                {
-                    parentNode = new TreeNode { Name = "...", Text = "..." };
-                    treeView.Nodes.Add(parentNode);
-                }
+                TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "...", "...");
                 parentNode.Nodes.Add(new TreeNode { Name = key, Text = key });
             }
         }
         treeView.ResumeLayout();
     }
 
-    private static TreeNode? FindNodeByName(TreeNodeCollection nodes, string name)
+    private static TreeNode FindOrCreateNode(TreeNodeCollection nodes, string name, string text)
     {
         foreach (TreeNode node in nodes)
         {
             if (node.Name == name)
+            {
                 return node;
-            var found = FindNodeByName(node.Nodes, name);
-            if (found != null)
-                return found;
+            }
         }
-        return null;
+        var newNode = new TreeNode { Name = name, Text = text };
+        nodes.Add(newNode);
+        return newNode;
     }
 }

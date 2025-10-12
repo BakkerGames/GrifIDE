@@ -4,9 +4,6 @@ namespace GrifIDE;
 
 public partial class FormMain
 {
-    private bool editLoading = false;
-    private TextBox editTextBox = new();
-
     private void InitEditText()
     {
         editTextBox = new TextBox
@@ -16,7 +13,7 @@ public partial class FormMain
             ScrollBars = ScrollBars.Both,
             Font = new Font("Consolas", 16),
             AcceptsTab = true,
-            WordWrap = false,
+            WordWrap = true,
             BackColor = Color.Black,
             ForeColor = Color.Lime,
         };

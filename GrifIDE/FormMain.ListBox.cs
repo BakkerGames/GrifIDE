@@ -4,14 +4,12 @@ namespace GrifIDE;
 
 public partial class FormMain
 {
-    private ListBox editListBox = new();
-
     private void InitEditList()
     {
         editListBox = new ListBox
         {
             Dock = DockStyle.Left,
-            Width = 200,
+            Width = 300,
             Font = new Font("Consolas", 12),
             BackColor = Color.Black,
             ForeColor = Color.Lime,
@@ -25,13 +23,12 @@ public partial class FormMain
     {
         if (editListBox.SelectedIndex >= 0)
         {
-            var selectedKey = editListBox.Items[editListBox.SelectedIndex].ToString();
-            if (selectedKey != null)
+            currentKey = editListBox.Items[editListBox.SelectedIndex].ToString();
+            if (currentKey != null)
             {
                 editLoading = true;
                 editTextBox.Clear();
-                var tempText = grodEdit.Get(selectedKey, true) ?? "";
-                tempText = Dags.PrettyScript(tempText);
+                var tempText = grodEdit.Get(currentKey, true) ?? "";
                 editTextBox.Text = tempText;
                 editLoading = false;
             }

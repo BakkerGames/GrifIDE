@@ -66,7 +66,7 @@ public partial class FormMain
     {
         if (!string.IsNullOrEmpty(filenameEdit))
         {
-            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), false);
+            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), true);
             MessageBox.Show($"Saved to {Path.GetFileName(filenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }

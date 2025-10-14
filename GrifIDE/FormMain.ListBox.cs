@@ -1,4 +1,6 @@
 ﻿using Grif;
+using static GrifIDE.Options;
+using static GrifIDE.Routines;
 
 namespace GrifIDE;
 
@@ -9,10 +11,10 @@ public partial class FormMain
         editListBox = new ListBox
         {
             Dock = DockStyle.Left,
-            Width = 300,
-            Font = new Font("Consolas", 12),
-            BackColor = Color.Black,
-            ForeColor = Color.Lime,
+            Width = ListPanelWidth,
+            Font = new Font(ListFontFamily, ListFontSize),
+            BackColor = Color.FromName(ListColorBackground),
+            ForeColor = Color.FromName(ListColorForeground),
             Sorted = true
         };
         editListBox.SelectedIndexChanged += EditListBox_SelectedIndexChanged;

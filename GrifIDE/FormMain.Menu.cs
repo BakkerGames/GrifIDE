@@ -1,4 +1,5 @@
-﻿using Grif;
+﻿using static GrifIDE.Options;
+using static GrifIDE.Routines;
 
 namespace GrifIDE;
 
@@ -32,6 +33,10 @@ public partial class FormMain
         [
             formatMenuItem,
         ]);
+        // View Menu
+        var viewMenuItem = new ToolStripMenuItem("&View");
+        var showControlCharsMenuItem = new ToolStripMenuItem("Show &Control Characters", null, ShowControlCharsMenuItem_Click, Keys.F7);
+        viewMenuItem.DropDownItems.Add(showControlCharsMenuItem);
         // Tools Menu
         var toolsMenuItem = new ToolStripMenuItem("&Tools");
         var optionsMenuItem = new ToolStripMenuItem("&Options", null, OptionsMenuItem_Click);
@@ -43,13 +48,32 @@ public partial class FormMain
         [
             fileMenuItem,
             editMenuItem,
+            viewMenuItem,
             toolsMenuItem,
             helpMenuItem
         ]);
         Controls.Add(menuStripMain);
         menuStripMain.ResumeLayout(false);
         menuStripMain.PerformLayout();
-        MainMenuStrip = menuStripMain;
+        this.MainMenuStrip = menuStripMain;
+    }
+
+    private void ShowControlCharsMenuItem_Click(object? sender, EventArgs e)
+    {
+        ShowControlCharacters = !ShowControlCharacters;
+        if (sender is ToolStripMenuItem menuItem)
+        {
+            menuItem.Checked = ShowControlCharacters;
+        }
+        if (string.IsNullOrEmpty(currentKey))
+        {
+            return;
+        }
+        var tempText = grodEdit.Get(currentKey, true);
+        editLoading = true;
+        editTextBox.Clear();
+        editTextBox.Text = FormatTextForEdit(tempText);
+        editLoading = false;
     }
 
     private void NewMenuItem_Click(object? sender, EventArgs e)
@@ -87,7 +111,7 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = grodEdit.Get(currentKey, true) ?? "";
+        var tempText = grodEdit.Get(currentKey, true);
         editLoading = true;
         editTextBox.Clear();
         editTextBox.Text = FormatTextForEdit(tempText);

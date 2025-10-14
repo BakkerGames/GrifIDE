@@ -1,4 +1,6 @@
 ﻿using Grif;
+using static GrifIDE.Routines;
+using static GrifIDE.Options;
 
 namespace GrifIDE;
 
@@ -9,10 +11,10 @@ public partial class FormMain
         treeView = new TreeView
         {
             Dock = DockStyle.Left,
-            Width = 300,
-            Font = new Font("Consolas", 12),
-            BackColor = Color.Black,
-            ForeColor = Color.Lime,
+            Width = TreePanelWidth,
+            Font = new Font(TreeFontFamily, TreeFontSize),
+            BackColor = Color.FromName(TreeColorBackground),
+            ForeColor = Color.FromName(TreeColorForeground),
         };
         panelMain.Controls.Add(treeView);
         treeView.AfterSelect += TreeView_AfterSelect;
@@ -34,15 +36,6 @@ public partial class FormMain
             currentKey = null;
         }
         editLoading = false;
-    }
-
-    private string FormatTextForEdit(string text)
-    {
-        if (text.StartsWith('@'))
-        {
-            return Dags.PrettyScript(text);
-        }
-        return text.Replace("\\n", "\r\n");
     }
 
     private void PopulateTreeView(Grod grod)

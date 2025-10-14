@@ -1,0 +1,27 @@
+GRIF IDE Design Logs
+--------------------
+
+2025-09-30
+- Created project GRIF IDE.
+- Everything is drawn in code.
+
+2025-10-11
+- Added menu items in code.
+- Added SetTabWidth(4) to text editor.
+- Added layout for tree view and text editor.
+- Added filling tree view from CastleQuest project file.
+- Added editing list box for scripts.
+
+2025-10-12
+- Added JSON formatting for saving GRIF files.
+
+2025-10-13
+- Added format/unformat for GRIF files.
+- Added currentKey to track current selection in tree view.
+
+2025-10-14
+- Added Routines static class for utility functions.
+- Added Options static class for application settings.
+- Use Options for tab width, fonts, colors, panel widths.
+- Added ShowControlCharacters option for text editor.
+- Added View menu for toggling ShowControlCharacters.

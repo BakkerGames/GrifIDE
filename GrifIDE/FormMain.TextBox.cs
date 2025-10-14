@@ -1,5 +1,5 @@
-﻿using Grif;
-using System.Runtime.InteropServices;
+﻿using static GrifIDE.Options;
+using static GrifIDE.Routines;
 
 namespace GrifIDE;
 
@@ -11,14 +11,14 @@ public partial class FormMain
         {
             Multiline = true,
             Dock = DockStyle.Fill,
-            ScrollBars = ScrollBars.Both,
-            Font = new Font("Consolas", 16),
+            ScrollBars = ScrollBars.Vertical,
+            Font = new Font(TextFontFamily, TextFontSize),
             AcceptsTab = true,
             WordWrap = true,
-            BackColor = Color.Black,
-            ForeColor = Color.Lime,
+            BackColor = Color.FromName(TextColorBackground),
+            ForeColor = Color.FromName(TextColorForeground),
         };
-        SetTabWidth(editTextBox, 4);
+        SetTabWidth(editTextBox, TabWidth);
         editTextBox.TextChanged += EditTextBox_TextChanged;
         panelMain.Controls.Add(editTextBox);
     }
@@ -38,26 +38,4 @@ public partial class FormMain
         editListBox.Items.Add(selectedKey);
         grodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
     }
-
-    private static string UnformatTextFromEdit(string text)
-    {
-        if (text.TrimStart().StartsWith('@'))
-        {
-            return Dags.CompressScript(text);
-        }
-        return text.Replace("\r\n", "\\n");
-    }
-
-    #region Set Tab Width P/Invoke
-
-    [DllImport("User32.dll", CharSet = CharSet.Auto)]
-    private static extern IntPtr SendMessage(IntPtr h, int msg, int wParam, int[] lParam);
-
-    public static void SetTabWidth(TextBox textbox, int tabWidth)
-    {
-        const int EM_SETTABSTOPS = 0x00CB;
-        SendMessage(textbox.Handle, EM_SETTABSTOPS, 1, [tabWidth * 4]);
-    }
-
-    #endregion
 }

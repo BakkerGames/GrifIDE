@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Grif;
+using System.Runtime.InteropServices;
 
 namespace GrifIDE;
 
@@ -30,15 +31,25 @@ public partial class FormMain
         {
             if (item.ToString() == selectedKey)
             {
-                grodEdit.Set(selectedKey, editTextBox.Text);
+                grodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
                 return;
             }
         }
         editListBox.Items.Add(selectedKey);
-        grodEdit.Set(selectedKey, editTextBox.Text);
+        grodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
+    }
+
+    private static string UnformatTextFromEdit(string text)
+    {
+        if (text.TrimStart().StartsWith('@'))
+        {
+            return Dags.CompressScript(text);
+        }
+        return text.Replace("\r\n", "\\n");
     }
 
     #region Set Tab Width P/Invoke
+
     [DllImport("User32.dll", CharSet = CharSet.Auto)]
     private static extern IntPtr SendMessage(IntPtr h, int msg, int wParam, int[] lParam);
 
@@ -47,5 +58,6 @@ public partial class FormMain
         const int EM_SETTABSTOPS = 0x00CB;
         SendMessage(textbox.Handle, EM_SETTABSTOPS, 1, [tabWidth * 4]);
     }
+
     #endregion
 }

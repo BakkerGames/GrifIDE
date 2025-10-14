@@ -38,7 +38,7 @@ public partial class FormMain : Form
         filename = "C:\\Users\\Scott\\source\\repos\\Castlequest_GRIF\\Castlequest.grif";
         filenameEdit = filename + "edit"; // *.grifedit
         grod = new Grod(Path.GetFileNameWithoutExtension(filename));
-        var content = Grif.Grif.ReadGrif(filename);
+        var content = ReadGrif(filename);
         grod.AddItems(content);
         PopulateTreeView(grod);
         grodEdit.Clear(false);

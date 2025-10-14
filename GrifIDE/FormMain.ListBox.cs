@@ -26,10 +26,10 @@ public partial class FormMain
             currentKey = editListBox.Items[editListBox.SelectedIndex].ToString();
             if (currentKey != null)
             {
+                var tempText = grodEdit.Get(currentKey, true) ?? "";
                 editLoading = true;
                 editTextBox.Clear();
-                var tempText = grodEdit.Get(currentKey, true) ?? "";
-                editTextBox.Text = tempText;
+                editTextBox.Text = FormatTextForEdit(tempText);
                 editLoading = false;
             }
         }

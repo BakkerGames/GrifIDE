@@ -66,7 +66,7 @@ public partial class FormMain
     {
         if (!string.IsNullOrEmpty(filenameEdit))
         {
-            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), true);
+            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), false);
             MessageBox.Show($"Saved to {Path.GetFileName(filenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
@@ -84,10 +84,10 @@ public partial class FormMain
     private void FormatMenuItem_Click(object? sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(currentKey)) return;
-        var originalText = grodEdit.Get(currentKey, true) ?? "";
-        var formattedText = Dags.PrettyScript(originalText);
+        var tempText = grodEdit.Get(currentKey, true) ?? "";
         editLoading = true;
-        editTextBox.Text = formattedText;
+        editTextBox.Clear();
+        editTextBox.Text = FormatTextForEdit(tempText);
         editLoading = false;
     }
 

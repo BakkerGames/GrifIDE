@@ -27,13 +27,18 @@ public partial class FormMain
         {
             currentKey = treeView.SelectedNode.Name;
             var tempText = grodEdit.Get(currentKey, true) ?? "";
-            if (!grodEdit.ContainsKey(currentKey, false))
-            {
-                tempText = Dags.PrettyScript(tempText);
-            }
-            editTextBox.Text = tempText;
+            editTextBox.Text = FormatTextForEdit(tempText);
         }
         editLoading = false;
+    }
+
+    private string FormatTextForEdit(string text)
+    {
+        if (text.StartsWith('@'))
+        {
+            return Dags.PrettyScript(text);
+        }
+        return text.Replace("\\n", "\r\n");
     }
 
     private void PopulateTreeView(Grod grod)

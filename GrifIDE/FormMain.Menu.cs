@@ -83,7 +83,10 @@ public partial class FormMain
 
     private void FormatMenuItem_Click(object? sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(currentKey)) return;
+        if (string.IsNullOrEmpty(currentKey))
+        {
+            return;
+        }
         var tempText = grodEdit.Get(currentKey, true) ?? "";
         editLoading = true;
         editTextBox.Clear();

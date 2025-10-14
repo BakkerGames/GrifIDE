@@ -24,7 +24,7 @@ public partial class FormMain
         if (editListBox.SelectedIndex >= 0)
         {
             currentKey = editListBox.Items[editListBox.SelectedIndex].ToString();
-            if (currentKey != null)
+            if (!string.IsNullOrEmpty(currentKey))
             {
                 var tempText = grodEdit.Get(currentKey, true) ?? "";
                 editLoading = true;

@@ -21,13 +21,17 @@ public partial class FormMain
     private void TreeView_AfterSelect(object? sender, EventArgs e)
     {
         editLoading = true;
-        editListBox.ClearSelected();
+        editListBox.SelectedIndex = -1;
         editTextBox.Clear();
         if (treeView.SelectedNode != null)
         {
             currentKey = treeView.SelectedNode.Name;
             var tempText = grodEdit.Get(currentKey, true) ?? "";
             editTextBox.Text = FormatTextForEdit(tempText);
+        }
+        else
+        {
+            currentKey = null;
         }
         editLoading = false;
     }

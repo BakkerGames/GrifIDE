@@ -17,7 +17,7 @@ GRIF IDE Design Logs
 
 2025-10-13
 - Added format/unformat for GRIF files.
-- Added currentKey to track current selection in tree view.
+- Added CurrentKey to track current selection in tree view.
 
 2025-10-14
 - Added Routines static class for utility functions.

@@ -1,4 +1,5 @@
-﻿using static GrifIDE.Options;
+﻿using static GrifIDE.Common;
+using static GrifIDE.Options;
 using static GrifIDE.Routines;
 
 namespace GrifIDE;
@@ -25,17 +26,17 @@ public partial class FormMain
 
     private void EditTextBox_TextChanged(object? sender, EventArgs e)
     {
-        if (editLoading) return;
+        if (EditLoading) return;
         var selectedKey = treeView.SelectedNode.Name;
         foreach (var item in editListBox.Items)
         {
             if (item.ToString() == selectedKey)
             {
-                grodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
+                GrodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
                 return;
             }
         }
         editListBox.Items.Add(selectedKey);
-        grodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
+        GrodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
     }
 }

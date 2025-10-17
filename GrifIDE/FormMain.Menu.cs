@@ -1,5 +1,7 @@
-﻿using static GrifIDE.Options;
+﻿using static GrifIDE.Common;
+using static GrifIDE.Options;
 using static GrifIDE.Routines;
+using static GrifIDE.ConfigRoutines;
 
 namespace GrifIDE;
 
@@ -37,6 +39,7 @@ public partial class FormMain
         var viewMenuItem = new ToolStripMenuItem("&View");
         var showControlCharsMenuItem = new ToolStripMenuItem("Show &Control Characters", null, ShowControlCharsMenuItem_Click, Keys.F7);
         viewMenuItem.DropDownItems.Add(showControlCharsMenuItem);
+        showControlCharsMenuItem.Checked = ShowControlCharacters;
         // Tools Menu
         var toolsMenuItem = new ToolStripMenuItem("&Tools");
         var optionsMenuItem = new ToolStripMenuItem("&Options", null, OptionsMenuItem_Click);
@@ -65,15 +68,15 @@ public partial class FormMain
         {
             menuItem.Checked = ShowControlCharacters;
         }
-        if (string.IsNullOrEmpty(currentKey))
+        if (string.IsNullOrEmpty(CurrentKey))
         {
             return;
         }
-        var tempText = grodEdit.Get(currentKey, true);
-        editLoading = true;
+        var tempText = GrodEdit.Get(CurrentKey, true);
+        EditLoading = true;
         editTextBox.Clear();
         editTextBox.Text = FormatTextForEdit(tempText);
-        editLoading = false;
+        EditLoading = false;
     }
 
     private void NewMenuItem_Click(object? sender, EventArgs e)
@@ -88,10 +91,10 @@ public partial class FormMain
 
     private void SaveMenuItem_Click(object? sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(filenameEdit))
+        if (!string.IsNullOrEmpty(FilenameEdit))
         {
-            Grif.Grif.WriteGrif(filenameEdit, grodEdit.Items(false, true), false);
-            MessageBox.Show($"Saved to {Path.GetFileName(filenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
+            Grif.Grif.WriteGrif(FilenameEdit, GrodEdit.Items(false, true), false);
+            MessageBox.Show($"Saved to {Path.GetFileName(FilenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
 
@@ -107,20 +110,21 @@ public partial class FormMain
 
     private void FormatMenuItem_Click(object? sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(currentKey))
+        if (string.IsNullOrEmpty(CurrentKey))
         {
             return;
         }
-        var tempText = grodEdit.Get(currentKey, true);
-        editLoading = true;
+        var tempText = GrodEdit.Get(CurrentKey, true);
+        EditLoading = true;
         editTextBox.Clear();
         editTextBox.Text = FormatTextForEdit(tempText);
-        editLoading = false;
+        EditLoading = false;
     }
 
     private void OptionsMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Options are not implemented yet.", "Options", MessageBoxButtons.OK, MessageBoxIcon.None);
+        SaveConfig();
+        MessageBox.Show("Options saved.", "Options", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
     private void HelpMenuItem_Click(object? sender, EventArgs e)

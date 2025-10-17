@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using static Grif.Common;
 using static GrifIDE.Options;
+using static GrifIDE.Common;
 
 namespace GrifIDE;
 
@@ -52,6 +53,35 @@ internal static class Routines
             tempText = tempText.Replace($" {NL}", $"{SPACE}{NL}");
         }
         return tempText;
+    }
+
+
+    internal static string GetDocumentsFolder()
+    {
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        path = Path.Combine(path, IDE_APP_NAME);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        return path;
+    }
+
+    internal static string GetConfigFilename()
+    {
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        path = Path.Combine(path, IDE_APP_NAME);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        path = Path.Combine(path, CONFIG_FILENAME);
+        return path;
+    }
+
+    internal static string GetEditFilename()
+    {
+        return Path.Combine(GetDocumentsFolder(), Path.GetFileNameWithoutExtension(Filename) + ".grifedit");
     }
 
     #region Set Tab Width P/Invoke

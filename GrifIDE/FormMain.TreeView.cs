@@ -1,6 +1,7 @@
 ﻿using Grif;
-using static GrifIDE.Routines;
+using static GrifIDE.Common;
 using static GrifIDE.Options;
+using static GrifIDE.Routines;
 
 namespace GrifIDE;
 
@@ -22,27 +23,28 @@ public partial class FormMain
 
     private void TreeView_AfterSelect(object? sender, EventArgs e)
     {
-        editLoading = true;
+        EditLoading = true;
         editListBox.SelectedIndex = -1;
         editTextBox.Clear();
-        if (treeView.SelectedNode != null)
+        if (treeView.SelectedNode != null 
+            && GrodEdit.Get(treeView.SelectedNode.Name,true) != null)
         {
-            currentKey = treeView.SelectedNode.Name;
-            var tempText = grodEdit.Get(currentKey, true) ?? "";
+            CurrentKey = treeView.SelectedNode.Name;
+            var tempText = GrodEdit.Get(CurrentKey, true) ?? "";
             editTextBox.Text = FormatTextForEdit(tempText);
         }
         else
         {
-            currentKey = null;
+            CurrentKey = null;
         }
-        editLoading = false;
+        EditLoading = false;
     }
 
-    private void PopulateTreeView(Grod grod)
+    private void PopulateTreeView(Grod GrodBase)
     {
         treeView.SuspendLayout();
         treeView.Nodes.Clear();
-        var keys = grod.Keys(true, true);
+        var keys = GrodBase.Keys(true, true);
         foreach (var key in keys)
         {
             if (key.StartsWith('@'))

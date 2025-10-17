@@ -1,4 +1,5 @@
 ﻿using Grif;
+using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
 
@@ -25,23 +26,23 @@ public partial class FormMain
     {
         if (editListBox.SelectedIndex >= 0)
         {
-            currentKey = editListBox.Items[editListBox.SelectedIndex].ToString();
-            if (!string.IsNullOrEmpty(currentKey))
+            CurrentKey = editListBox.Items[editListBox.SelectedIndex].ToString();
+            if (!string.IsNullOrEmpty(CurrentKey))
             {
-                var tempText = grodEdit.Get(currentKey, true) ?? "";
-                editLoading = true;
+                var tempText = GrodEdit.Get(CurrentKey, true) ?? "";
+                EditLoading = true;
                 editTextBox.Clear();
                 editTextBox.Text = FormatTextForEdit(tempText);
-                editLoading = false;
+                EditLoading = false;
             }
         }
     }
 
-    private void PopulateEditList(Grod grodEdit)
+    private void PopulateEditList(Grod GrodEdit)
     {
         editListBox.SuspendLayout();
         editListBox.Items.Clear();
-        var keys = grodEdit.Keys(false, true);
+        var keys = GrodEdit.Keys(false, true);
         foreach (var key in keys)
         {
             editListBox.Items.Add(key);

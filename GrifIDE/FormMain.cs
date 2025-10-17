@@ -1,22 +1,17 @@
 using Grif;
 using static Grif.Grif;
+using static GrifIDE.Common;
+using static GrifIDE.ConfigRoutines;
+using static GrifIDE.Routines;
 
 namespace GrifIDE;
 
 public partial class FormMain : Form
 {
-    private Grod grod = new("base");
-    private Grod grodEdit = new("edit");
-
     private Panel panelMain = new();
     private TreeView treeView = new();
     private ListBox editListBox = new();
     private TextBox editTextBox = new();
-
-    private string filename = "";
-    private string filenameEdit = "";
-    private bool editLoading = false;
-    private string? currentKey = null;
 
     public FormMain()
     {
@@ -25,6 +20,7 @@ public partial class FormMain : Form
 
     private void FormMain_Load(object sender, EventArgs e)
     {
+        LoadConfig();
         // Add in reverse order for proper placement
         panelMain = new Panel
         {
@@ -35,20 +31,21 @@ public partial class FormMain : Form
         InitEditList();
         InitTreeView();
         InitMenu();
-        filename = "C:\\Users\\Scott\\source\\repos\\Castlequest_GRIF\\Castlequest.grif";
-        filenameEdit = filename + "edit"; // *.grifedit
-        grod = new Grod(Path.GetFileNameWithoutExtension(filename));
-        var content = ReadGrif(filename);
-        grod.AddItems(content);
-        PopulateTreeView(grod);
-        grodEdit.Clear(false);
-        if (File.Exists(filenameEdit))
+        if (File.Exists(Filename))
         {
-            grodEdit = new Grod(Path.GetFileNameWithoutExtension(filenameEdit) + ".edit");
-            var editContent = ReadGrif(filenameEdit);
-            grodEdit.AddItems(editContent);
+            GrodBase = new Grod(Path.GetFileNameWithoutExtension(Filename));
+            var content = ReadGrif(Filename);
+            GrodBase.Clear(true);
+            GrodBase.AddItems(content);
+            GrodEdit.Parent = GrodBase;
+            GrodEdit.Clear(false);
+            if (File.Exists(FilenameEdit))
+            {
+                var editContent = ReadGrif(FilenameEdit);
+                GrodEdit.AddItems(editContent);
+            }
         }
-        grodEdit.Parent = grod;
-        PopulateEditList(grodEdit);
+        PopulateTreeView(GrodBase);
+        PopulateEditList(GrodEdit);
     }
 }

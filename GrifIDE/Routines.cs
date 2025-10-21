@@ -55,7 +55,6 @@ internal static class Routines
         return tempText;
     }
 
-
     internal static string GetDocumentsFolder()
     {
         var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

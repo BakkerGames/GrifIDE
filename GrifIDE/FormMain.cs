@@ -1,4 +1,3 @@
-using Grif;
 using static Grif.Grif;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
@@ -31,21 +30,40 @@ public partial class FormMain : Form
         InitEditList();
         InitTreeView();
         InitMenu();
-        if (File.Exists(Filename))
+        OpenFile(Filename);
+    }
+
+    private void OpenFile(string? filename)
+    {
+        try
         {
-            GrodBase = new Grod(Path.GetFileNameWithoutExtension(Filename));
-            var content = ReadGrif(Filename);
-            GrodBase.Clear(true);
-            GrodBase.AddItems(content);
-            GrodEdit.Parent = GrodBase;
-            GrodEdit.Clear(false);
-            if (File.Exists(FilenameEdit))
+            if (string.IsNullOrEmpty(filename))
             {
-                var editContent = ReadGrif(FilenameEdit);
-                GrodEdit.AddItems(editContent);
+                return;
             }
+            if (File.Exists(filename))
+            {
+                Filename = filename;
+                FilenameEdit = GetEditFilename();
+                SaveConfig();
+                var content = ReadGrif(Filename);
+                GrodBase.Clear(true);
+                GrodBase.AddItems(content);
+                GrodEdit.Parent = GrodBase;
+                GrodEdit.Clear(false);
+                if (File.Exists(FilenameEdit))
+                {
+                    var editContent = ReadGrif(FilenameEdit);
+                    GrodEdit.AddItems(editContent);
+                }
+            }
+            PopulateTreeView(GrodBase);
+            PopulateEditList(GrodEdit);
+            this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
         }
-        PopulateTreeView(GrodBase);
-        PopulateEditList(GrodEdit);
+        catch (Exception)
+        {
+            MessageBox.Show($"Error opening file: {filename}", "Error", MessageBoxButtons.OK);
+        }
     }
 }

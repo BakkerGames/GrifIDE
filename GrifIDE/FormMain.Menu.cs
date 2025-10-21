@@ -1,7 +1,9 @@
-﻿using static GrifIDE.Common;
+﻿using Grif;
+using static Grif.Grif;
+using static GrifIDE.Common;
+using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
-using static GrifIDE.ConfigRoutines;
 
 namespace GrifIDE;
 
@@ -16,7 +18,7 @@ public partial class FormMain
         var fileMenuItem = new ToolStripMenuItem("&File");
         var newMenuItem = new ToolStripMenuItem("&New", null, NewMenuItem_Click);
         var openMenuItem = new ToolStripMenuItem("&Open", null, OpenMenuItem_Click);
-        var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click, Keys.Control | Keys.S );
+        var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click, Keys.Control | Keys.S);
         var saveAsMenuItem = new ToolStripMenuItem("Save &As", null, SaveAsMenuItem_Click);
         var exitMenuItem = new ToolStripMenuItem("E&xit", null, ExitMenuItem_Click);
         fileMenuItem.DropDownItems.AddRange(
@@ -86,7 +88,18 @@ public partial class FormMain
 
     private void OpenMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Open is not implemented yet.", "Open", MessageBoxButtons.OK, MessageBoxIcon.None);
+        OpenFileDialog ofd = new()
+        {
+            Filter = "Grif Files (*.grif)|*.grif",
+            Title = "Open Grif File(s)",
+            FilterIndex = 0,
+            Multiselect = false,
+            FileName = Path.GetFileName(Filename)
+        };
+        if (ofd.ShowDialog() == DialogResult.OK)
+        {
+            OpenFile(ofd.FileName);
+        }
     }
 
     private void SaveMenuItem_Click(object? sender, EventArgs e)

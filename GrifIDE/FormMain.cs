@@ -1,3 +1,4 @@
+using static Grif.Dags;
 using static Grif.Grif;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
@@ -56,10 +57,26 @@ public partial class FormMain : Form
                     var editContent = ReadGrif(FilenameEdit);
                     GrodEdit.AddItems(editContent);
                 }
+                PopulateTreeView(GrodBase);
+                PopulateEditList(GrodEdit);
+                editListBox.SuspendLayout();
+                foreach (var item in content)
+                {
+                    if (item != null && item.Value != null && item.Value.StartsWith('@'))
+                    {
+                        if (!ValidateScript(item.Value))
+                        {
+                            if (!editListBox.Items.Contains(item.Key))
+                            {
+                                editListBox.Items.Add(item.Key);
+                                GrodEdit.Set(item.Key, item.Value);
+                            }
+                        }
+                    }
+                    this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
+                    editListBox.ResumeLayout();
+                }
             }
-            PopulateTreeView(GrodBase);
-            PopulateEditList(GrodEdit);
-            this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
         }
         catch (Exception)
         {

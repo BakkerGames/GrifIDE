@@ -42,6 +42,9 @@ public partial class FormMain : Form
             {
                 return;
             }
+            treeView.Nodes.Clear();
+            editListBox.Items.Clear();
+            editTextBox.Clear();
             if (File.Exists(filename))
             {
                 Filename = filename;

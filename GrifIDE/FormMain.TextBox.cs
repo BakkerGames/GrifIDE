@@ -27,16 +27,16 @@ public partial class FormMain
     private void EditTextBox_TextChanged(object? sender, EventArgs e)
     {
         if (EditLoading) return;
-        var selectedKey = treeView.SelectedNode.Name;
+        if (CurrentKey == null) return;
         foreach (var item in editListBox.Items)
         {
-            if (item.ToString() == selectedKey)
+            if (item.ToString() == CurrentKey)
             {
-                GrodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
+                GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editTextBox.Text));
                 return;
             }
         }
-        editListBox.Items.Add(selectedKey);
-        GrodEdit.Set(selectedKey, UnformatTextFromEdit(editTextBox.Text));
+        editListBox.Items.Add(CurrentKey);
+        GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editTextBox.Text));
     }
 }

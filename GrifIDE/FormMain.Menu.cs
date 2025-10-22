@@ -1,5 +1,4 @@
-﻿using Grif;
-using static Grif.Grif;
+﻿using static Grif.Grif;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
@@ -18,15 +17,16 @@ public partial class FormMain
         var fileMenuItem = new ToolStripMenuItem("&File");
         var newMenuItem = new ToolStripMenuItem("&New", null, NewMenuItem_Click);
         var openMenuItem = new ToolStripMenuItem("&Open", null, OpenMenuItem_Click);
-        var saveMenuItem = new ToolStripMenuItem("&Save", null, SaveMenuItem_Click, Keys.Control | Keys.S);
-        var saveAsMenuItem = new ToolStripMenuItem("Save &As", null, SaveAsMenuItem_Click);
+        var saveMenuItem = new ToolStripMenuItem("&Save Edits", null, SaveMenuItem_Click, Keys.Control | Keys.S);
+        var mergeMenuItem = new ToolStripMenuItem("&Merge and save", null, MergeMenuItem_Click);
         var exitMenuItem = new ToolStripMenuItem("E&xit", null, ExitMenuItem_Click);
         fileMenuItem.DropDownItems.AddRange(
         [
             newMenuItem,
             openMenuItem,
+            new ToolStripSeparator(),
             saveMenuItem,
-            saveAsMenuItem,
+            mergeMenuItem,
             new ToolStripSeparator(),
             exitMenuItem
         ]);
@@ -61,6 +61,22 @@ public partial class FormMain
         menuStripMain.ResumeLayout(false);
         menuStripMain.PerformLayout();
         this.MainMenuStrip = menuStripMain;
+    }
+
+    private void MergeMenuItem_Click(object? sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(Filename))
+        {
+            WriteGrif(Filename, GrodEdit.Items(true, true), false);
+            if (!string.IsNullOrEmpty(FilenameEdit) && File.Exists(FilenameEdit))
+            {
+                File.Delete(FilenameEdit);
+            }
+            GrodEdit.Clear(false);
+            editListBox.Items.Clear();
+            OpenFile(Filename);
+            MessageBox.Show($"Merged edits into {Path.GetFileName(Filename)}", "Merge and save", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
     }
 
     private void ShowControlCharsMenuItem_Click(object? sender, EventArgs e)
@@ -106,14 +122,9 @@ public partial class FormMain
     {
         if (!string.IsNullOrEmpty(FilenameEdit))
         {
-            Grif.Grif.WriteGrif(FilenameEdit, GrodEdit.Items(false, true), false);
-            MessageBox.Show($"Saved to {Path.GetFileName(FilenameEdit)}", "Save", MessageBoxButtons.OK, MessageBoxIcon.None);
+            WriteGrif(FilenameEdit, GrodEdit.Items(false, true), false);
+            MessageBox.Show($"Saved edits to {Path.GetFileName(FilenameEdit)}", "Save Edits", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
-    }
-
-    private void SaveAsMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("Save As is not implemented yet.", "Save As", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 
     private void ExitMenuItem_Click(object? sender, EventArgs e)

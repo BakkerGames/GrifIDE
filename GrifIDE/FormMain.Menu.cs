@@ -42,6 +42,8 @@ public partial class FormMain
         var showControlCharsMenuItem = new ToolStripMenuItem("Show &Control Characters", null, ShowControlCharsMenuItem_Click, Keys.F7);
         viewMenuItem.DropDownItems.Add(showControlCharsMenuItem);
         showControlCharsMenuItem.Checked = ShowControlCharacters;
+        // Play Menu
+        var playMenuItem = new ToolStripMenuItem("&Play", null, PlayMenuItem_Click);
         // Tools Menu
         var toolsMenuItem = new ToolStripMenuItem("&Tools");
         var optionsMenuItem = new ToolStripMenuItem("&Options", null, OptionsMenuItem_Click);
@@ -54,6 +56,7 @@ public partial class FormMain
             fileMenuItem,
             editMenuItem,
             viewMenuItem,
+            playMenuItem,
             toolsMenuItem,
             helpMenuItem
         ]);
@@ -61,6 +64,18 @@ public partial class FormMain
         menuStripMain.ResumeLayout(false);
         menuStripMain.PerformLayout();
         this.MainMenuStrip = menuStripMain;
+    }
+
+    private void PlayMenuItem_Click(object? sender, EventArgs e)
+    {
+        var formPlay = new FormPlay
+        {
+            StartPosition = FormStartPosition.CenterParent,
+            PlayFont = new Font(TextFontFamily, TextFontSize),
+            PlayBackColor = Color.FromName(TextColorBackground),
+            PlayForeColor = Color.FromName(TextColorForeground)
+        };
+        formPlay.ShowDialog(this);
     }
 
     private void MergeMenuItem_Click(object? sender, EventArgs e)

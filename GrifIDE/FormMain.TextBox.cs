@@ -8,20 +8,17 @@ public partial class FormMain
 {
     private void InitEditText()
     {
-        editTextBox = new TextBox
+        editRichTextBox = new RichTextBox
         {
-            Multiline = true,
             Dock = DockStyle.Fill,
-            ScrollBars = ScrollBars.Vertical,
             Font = new Font(TextFontFamily, TextFontSize),
             AcceptsTab = true,
             WordWrap = true,
             BackColor = Color.FromName(TextColorBackground),
             ForeColor = Color.FromName(TextColorForeground),
         };
-        SetTabWidth(editTextBox, TabWidth);
-        editTextBox.TextChanged += EditTextBox_TextChanged;
-        panelMain.Controls.Add(editTextBox);
+        editRichTextBox.TextChanged += EditTextBox_TextChanged;
+        panelMain.Controls.Add(editRichTextBox);
     }
 
     private void EditTextBox_TextChanged(object? sender, EventArgs e)
@@ -32,11 +29,11 @@ public partial class FormMain
         {
             if (item.ToString() == CurrentKey)
             {
-                GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editTextBox.Text));
+                GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editRichTextBox.Text));
                 return;
             }
         }
         editListBox.Items.Add(CurrentKey);
-        GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editTextBox.Text));
+        GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editRichTextBox.Text));
     }
 }

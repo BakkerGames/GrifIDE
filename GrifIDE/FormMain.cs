@@ -11,7 +11,7 @@ public partial class FormMain : Form
     private Panel panelMain = new();
     private TreeView treeView = new();
     private ListBox editListBox = new();
-    private TextBox editTextBox = new();
+    private RichTextBox editRichTextBox = new();
 
     public FormMain()
     {
@@ -44,7 +44,7 @@ public partial class FormMain : Form
             }
             treeView.Nodes.Clear();
             editListBox.Items.Clear();
-            editTextBox.Clear();
+            editRichTextBox.Clear();
             if (File.Exists(filename))
             {
                 Filename = filename;

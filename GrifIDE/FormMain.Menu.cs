@@ -107,8 +107,8 @@ public partial class FormMain
         }
         var tempText = GrodEdit.Get(CurrentKey, true);
         EditLoading = true;
-        editTextBox.Clear();
-        editTextBox.Text = FormatTextForEdit(tempText);
+        editRichTextBox.Clear();
+        editRichTextBox.Text = FormatTextForEdit(tempText);
         EditLoading = false;
     }
 
@@ -155,8 +155,8 @@ public partial class FormMain
         }
         var tempText = GrodEdit.Get(CurrentKey, true);
         EditLoading = true;
-        editTextBox.Clear();
-        editTextBox.Text = FormatTextForEdit(tempText);
+        editRichTextBox.Clear();
+        editRichTextBox.Text = FormatTextForEdit(tempText);
         EditLoading = false;
     }
 

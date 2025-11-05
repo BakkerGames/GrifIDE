@@ -25,3 +25,10 @@ GRIF IDE Design Logs
 - Use Options for tab width, fonts, colors, panel widths.
 - Added ShowControlCharacters option for text editor.
 - Added View menu for toggling ShowControlCharacters.
+
+2025-11-04
+- Finished GRIF2 changes. Merging back into this solution.
+
+2025-11-05
+- Changed editTextBox to editRichTextBox. No other changes yet.
+- Error when formatting and there are text strings, joins together!

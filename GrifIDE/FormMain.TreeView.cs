@@ -25,13 +25,13 @@ public partial class FormMain
     {
         EditLoading = true;
         editListBox.SelectedIndex = -1;
-        editTextBox.Clear();
+        editRichTextBox.Clear();
         if (treeView.SelectedNode != null 
             && GrodEdit.Get(treeView.SelectedNode.Name,true) != null)
         {
             CurrentKey = treeView.SelectedNode.Name;
             var tempText = GrodEdit.Get(CurrentKey, true) ?? "";
-            editTextBox.Text = FormatTextForEdit(tempText);
+            editRichTextBox.Text = FormatTextForEdit(tempText);
         }
         else
         {

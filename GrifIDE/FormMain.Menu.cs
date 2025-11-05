@@ -1,4 +1,4 @@
-﻿using static Grif.Grif;
+﻿using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;

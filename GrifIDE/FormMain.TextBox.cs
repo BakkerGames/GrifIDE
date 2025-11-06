@@ -29,11 +29,11 @@ public partial class FormMain
         {
             if (item.ToString() == CurrentKey)
             {
-                GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editRichTextBox.Text));
+                GrodEdit.Set(CurrentKey, editRichTextBox.Text);
                 return;
             }
         }
         editListBox.Items.Add(CurrentKey);
-        GrodEdit.Set(CurrentKey, UnformatTextFromEdit(editRichTextBox.Text));
+        GrodEdit.Set(CurrentKey, editRichTextBox.Text);
     }
 }

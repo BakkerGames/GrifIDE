@@ -1,8 +1,7 @@
 ﻿using Grif;
-using System.Runtime.InteropServices;
 using static Grif.Common;
-using static GrifIDE.Options;
 using static GrifIDE.Common;
+using static GrifIDE.Options;
 
 namespace GrifIDE;
 
@@ -40,7 +39,7 @@ internal static class Routines
         }
         else
         {
-            tempText = tempText.Replace("\r\n", NL).Replace("\r", NL);
+            tempText = tempText.Replace("\r\n", NL).Replace("\r", NL).Replace("\n", NL);
             if (tempText.StartsWith(' '))
             {
                 tempText = SPACE + tempText[1..];
@@ -82,17 +81,4 @@ internal static class Routines
     {
         return Path.Combine(GetDocumentsFolder(), Path.GetFileNameWithoutExtension(Filename) + ".grifedit");
     }
-
-    #region Set Tab Width P/Invoke
-
-    [DllImport("User32.dll", CharSet = CharSet.Auto)]
-    private static extern IntPtr SendMessage(IntPtr h, int msg, int wParam, int[] lParam);
-
-    internal static void SetTabWidth(TextBox textbox, int tabWidth)
-    {
-        const int EM_SETTABSTOPS = 0x00CB;
-        SendMessage(textbox.Handle, EM_SETTABSTOPS, 1, [tabWidth * 4]);
-    }
-
-    #endregion
 }

@@ -1,4 +1,4 @@
-﻿using static Grif.IO;
+﻿using System.Text.Json;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
@@ -82,15 +82,15 @@ public partial class FormMain
     {
         if (!string.IsNullOrEmpty(Filename))
         {
-            WriteGrif(Filename, GrodEdit.Items(true, true), false);
-            if (!string.IsNullOrEmpty(FilenameEdit) && File.Exists(FilenameEdit))
-            {
-                File.Delete(FilenameEdit);
-            }
-            GrodEdit.Clear(false);
-            editListBox.Items.Clear();
-            OpenFile(Filename);
-            MessageBox.Show($"Merged edits into {Path.GetFileName(Filename)}", "Merge and save", MessageBoxButtons.OK, MessageBoxIcon.None);
+            //WriteGrif(Filename, GrodEdit.Items(true, true), false);
+            //if (!string.IsNullOrEmpty(FilenameEdit) && File.Exists(FilenameEdit))
+            //{
+            //    File.Delete(FilenameEdit);
+            //}
+            //GrodEdit.Clear(false);
+            //editListBox.Items.Clear();
+            //OpenFile(Filename);
+            //MessageBox.Show($"Merged edits into {Path.GetFileName(Filename)}", "Merge and save", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
 
@@ -105,7 +105,7 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = GrodEdit.Get(CurrentKey, true);
+        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
@@ -137,7 +137,7 @@ public partial class FormMain
     {
         if (!string.IsNullOrEmpty(FilenameEdit))
         {
-            WriteGrif(FilenameEdit, GrodEdit.Items(false, true), false);
+            File.WriteAllText(FilenameEdit, JsonSerializer.Serialize(EditItems, JsonOptionsOutput));
             MessageBox.Show($"Saved edits to {Path.GetFileName(FilenameEdit)}", "Save Edits", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
     }
@@ -153,7 +153,7 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = GrodEdit.Get(CurrentKey, true);
+        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);

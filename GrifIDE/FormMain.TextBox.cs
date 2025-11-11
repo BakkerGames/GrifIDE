@@ -29,11 +29,17 @@ public partial class FormMain
         {
             if (item.ToString() == CurrentKey)
             {
-                GrodEdit.Set(CurrentKey, editRichTextBox.Text);
+                var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault() ?? new();
+                tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
                 return;
             }
         }
         editListBox.Items.Add(CurrentKey);
-        GrodEdit.Set(CurrentKey, editRichTextBox.Text);
+        EditItems.Add(new EditItem
+        {
+            Action = "C",
+            Key = CurrentKey,
+            Value = UnformatTextFromEdit(editRichTextBox.Text),
+        });
     }
 }

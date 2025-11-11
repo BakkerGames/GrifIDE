@@ -3,6 +3,7 @@ using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Routines;
+using System.Text.Json;
 
 namespace GrifIDE;
 
@@ -53,15 +54,13 @@ public partial class FormMain : Form
                 var content = ReadGrif(Filename);
                 GrodBase.Clear(true);
                 GrodBase.AddItems(content);
-                GrodEdit.Parent = GrodBase;
-                GrodEdit.Clear(false);
+                EditItems.Clear();
                 if (File.Exists(FilenameEdit))
                 {
-                    var editContent = ReadGrif(FilenameEdit);
-                    GrodEdit.AddItems(editContent);
+                    EditItems = JsonSerializer.Deserialize<List<EditItem>>(File.ReadAllText(FilenameEdit)) ?? [];
                 }
                 PopulateTreeView(GrodBase);
-                PopulateEditList(GrodEdit);
+                PopulateEditList(EditItems);
                 editListBox.SuspendLayout();
                 foreach (var item in content)
                 {
@@ -72,7 +71,12 @@ public partial class FormMain : Form
                             if (!editListBox.Items.Contains(item.Key))
                             {
                                 editListBox.Items.Add(item.Key);
-                                GrodEdit.Set(item.Key, item.Value);
+                                EditItems.Add(new EditItem
+                                {
+                                    Action = "C",
+                                    Key = item.Key,
+                                    Value = item.Value,
+                                });
                             }
                         }
                     }

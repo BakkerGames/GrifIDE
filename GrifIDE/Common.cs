@@ -1,10 +1,11 @@
-﻿using Grif;
+﻿using System.Text.Json;
+using Grif;
 
 namespace GrifIDE;
 
 public static class Common
 {
-    public const string VERSION = "0.0.1";
+    public const string VERSION = "0.1.0";
     public const string IDE_APP_NAME = "GrifIDE";
     public const string CONFIG_FILENAME = "config.json";
 
@@ -20,11 +21,17 @@ public static class Common
     public const int DEFAULT_LIST_PANEL_WIDTH = 300;
 
     public static Grod GrodBase { get; set; } = new("base");
-    public static Grod GrodEdit { get; set; } = new("edit");
     public static Grod GrodConfig { get; set; } = new("config");
+
+    public static List<EditItem> EditItems { get; set; } = [];
 
     public static string? Filename { get; set; }
     public static string? FilenameEdit { get; set; }
     public static bool EditLoading { get; set; } = false;
     public static string? CurrentKey { get; set; }
+
+    public static JsonSerializerOptions JsonOptionsOutput { get; } = new()
+    {
+        WriteIndented = true,
+    };
 }

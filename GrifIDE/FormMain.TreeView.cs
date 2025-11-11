@@ -26,16 +26,23 @@ public partial class FormMain
         EditLoading = true;
         editListBox.SelectedIndex = -1;
         editRichTextBox.Clear();
-        if (treeView.SelectedNode != null 
-            && GrodEdit.Get(treeView.SelectedNode.Name,true) != null)
+        CurrentKey = null;
+        if (treeView.SelectedNode != null && !string.IsNullOrEmpty(treeView.SelectedNode.Name))
         {
             CurrentKey = treeView.SelectedNode.Name;
-            var tempText = GrodEdit.Get(CurrentKey, true) ?? "";
-            editRichTextBox.Text = FormatTextForEdit(tempText);
-        }
-        else
-        {
-            CurrentKey = null;
+            var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+            if (tempItem != null)
+            {
+                editRichTextBox.Text = FormatTextForEdit(tempItem.Value);
+            }
+            else
+            {
+                var grodValue = GrodBase.Get(CurrentKey, true);
+                if (grodValue != null)
+                {
+                    editRichTextBox.Text = FormatTextForEdit(grodValue);
+                }
+            }
         }
         EditLoading = false;
     }

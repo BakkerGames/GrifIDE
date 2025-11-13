@@ -20,8 +20,8 @@ internal static class Routines
         }
         else if (!ShowControlCharacters)
         {
-            tempText = tempText.Replace(NL, "\r\n");
-            tempText = tempText.Replace(SPACE, " ");
+            tempText = tempText.Replace(NL_CHAR, "\r\n");
+            tempText = tempText.Replace(SPACE_CHAR, " ");
         }
         else
         {
@@ -39,17 +39,17 @@ internal static class Routines
         }
         else
         {
-            tempText = tempText.Replace("\r\n", NL).Replace("\r", NL).Replace("\n", NL);
+            tempText = tempText.Replace("\r\n", NL_CHAR).Replace("\r", NL_CHAR).Replace("\n", NL_CHAR);
             if (tempText.StartsWith(' '))
             {
-                tempText = SPACE + tempText[1..];
+                tempText = SPACE_CHAR + tempText[1..];
             }
             if (tempText.EndsWith(' '))
             {
-                tempText = tempText[..^1] + SPACE;
+                tempText = tempText[..^1] + SPACE_CHAR;
             }
-            tempText = tempText.Replace($"{NL} ", $"{NL}{SPACE}");
-            tempText = tempText.Replace($" {NL}", $"{SPACE}{NL}");
+            tempText = tempText.Replace($"{NL_CHAR} ", $"{NL_CHAR}{SPACE_CHAR}");
+            tempText = tempText.Replace($" {NL_CHAR}", $"{SPACE_CHAR}{NL_CHAR}");
         }
         return tempText;
     }

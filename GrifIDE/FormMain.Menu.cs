@@ -3,6 +3,7 @@ using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
+using static Grif.IO;
 
 namespace GrifIDE;
 
@@ -32,9 +33,16 @@ public partial class FormMain
         ]);
         // Edit Menu
         var editMenuItem = new ToolStripMenuItem("&Edit");
+        var addMenuItem = new ToolStripMenuItem("&Add", null, AddMainMenuItem_Click);
+        var deleteMenuItem = new ToolStripMenuItem("&Delete", null, DeleteMenuItem_Click);
+        var renameMenuItem = new ToolStripMenuItem("&Rename", null, RenameMenuItem_Click);
         var formatMenuItem = new ToolStripMenuItem("&Format", null, FormatMenuItem_Click, Keys.F4);
         editMenuItem.DropDownItems.AddRange(
         [
+            addMenuItem,
+            deleteMenuItem,
+            renameMenuItem,
+            new ToolStripSeparator(),
             formatMenuItem,
         ]);
         // View Menu
@@ -66,6 +74,21 @@ public partial class FormMain
         this.MainMenuStrip = menuStripMain;
     }
 
+    private void RenameMenuItem_Click(object? sender, EventArgs e)
+    {
+        MessageBox.Show("Rename is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+    }
+
+    private void DeleteMenuItem_Click(object? sender, EventArgs e)
+    {
+        MessageBox.Show("Delete is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+    }
+
+    private void AddMainMenuItem_Click(object? sender, EventArgs e)
+    {
+        MessageBox.Show("Add is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+    }
+
     private void PlayMenuItem_Click(object? sender, EventArgs e)
     {
         var formPlay = new FormPlay
@@ -80,17 +103,37 @@ public partial class FormMain
 
     private void MergeMenuItem_Click(object? sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(Filename))
+        if (!string.IsNullOrEmpty(Filename) && EditItems.Count > 0)
         {
-            //WriteGrif(Filename, GrodEdit.Items(true, true), false);
-            //if (!string.IsNullOrEmpty(FilenameEdit) && File.Exists(FilenameEdit))
-            //{
-            //    File.Delete(FilenameEdit);
-            //}
-            //GrodEdit.Clear(false);
-            //editListBox.Items.Clear();
-            //OpenFile(Filename);
-            //MessageBox.Show($"Merged edits into {Path.GetFileName(Filename)}", "Merge and save", MessageBoxButtons.OK, MessageBoxIcon.None);
+            foreach (var editItem in EditItems)
+            {
+                if (editItem.Action == "A" || editItem.Action == "C")
+                {
+                    GrodBase.Set(editItem.Key, editItem.Value);
+                    continue;
+                }
+                if (editItem.Action == "R")
+                {
+                    GrodBase.Remove(editItem.OldKey!, false);
+                    GrodBase.Set(editItem.Key, editItem.Value);
+                    continue;
+                }
+                if (editItem.Action == "D")
+                {
+                    GrodBase.Remove(editItem.Key, false);
+                    continue;
+                }
+                MessageBox.Show($"Invalid Action {editItem.Action}", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
+                return;
+            }
+            WriteGrif(Filename, GrodBase.Items(true, true), false);
+            EditItems.Clear();
+            editListBox.Items.Clear();
+            if (File.Exists(FilenameEdit))
+            {
+                File.Delete(FilenameEdit);
+            }
+            PopulateTreeView(GrodBase);
         }
     }
 
@@ -105,7 +148,8 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
+        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
+        tempText ??= GrodBase.Get(CurrentKey, false) ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
@@ -153,7 +197,8 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
+        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
+        tempText ??= GrodBase.Get(CurrentKey, false) ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);

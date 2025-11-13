@@ -1,4 +1,5 @@
-﻿using Grif;
+﻿using System.Windows.Forms;
+using Grif;
 using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
@@ -51,6 +52,7 @@ public partial class FormMain
     {
         treeView.SuspendLayout();
         treeView.Nodes.Clear();
+        var singleKeys = new List<string>();
         var keys = GrodBase.Keys(true, true);
         foreach (var key in keys)
         {
@@ -90,7 +92,14 @@ public partial class FormMain
             }
             else
             {
-                TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "...", "...");
+                singleKeys.Add(key);
+            }
+        }
+        if (singleKeys.Count > 0)
+        {
+            TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "...", "...");
+            foreach (var key in singleKeys)
+            {
                 parentNode.Nodes.Add(new TreeNode { Name = key, Text = key });
             }
         }

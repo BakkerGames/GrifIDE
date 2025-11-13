@@ -1,4 +1,6 @@
-﻿namespace GrifIDE;
+﻿using System.ComponentModel;
+
+namespace GrifIDE;
 
 public partial class FormPlay : Form
 {
@@ -9,6 +11,7 @@ public partial class FormPlay : Form
         InitializeComponent();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Font PlayFont
     {
         get => textBoxMain.Font;
@@ -16,6 +19,7 @@ public partial class FormPlay : Form
 
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Color PlayBackColor
     {
         get => textBoxMain.BackColor;
@@ -23,6 +27,7 @@ public partial class FormPlay : Form
 
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Color PlayForeColor
     {
         get => textBoxMain.ForeColor;

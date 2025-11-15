@@ -32,3 +32,13 @@ GRIF IDE Design Logs
 2025-11-05
 - Changed editTextBox to editRichTextBox. No other changes yet.
 - Error when formatting and there are text strings, joins together!
+
+2025-11-15
+- Save changes to .grifedit file.
+- Load .grifedit file on startup if it exists.
+- Save .grifedit file on exit.
+- Allow Add, Change, Delete, and Rename items in EditItems.
+- Merge changes back to .grif file.
+- Add new item.
+- Display each item's Action in edit list box.
+- Change "D" to "C" when adding a deleted item back.

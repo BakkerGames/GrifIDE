@@ -1,9 +1,8 @@
-﻿using System.Text.Json;
+﻿using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
-using static Grif.IO;
 
 namespace GrifIDE;
 
@@ -86,7 +85,42 @@ public partial class FormMain
 
     private void AddMainMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Add is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+        var newKey = InputBox.Show("Add New Key", "Enter the new key:");
+        if (newKey == null)
+        {
+            return;
+        }
+        if (string.IsNullOrEmpty(newKey))
+        {
+            MessageBox.Show("Key cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+        var item = EditItems.Where(x => x.Key == newKey).FirstOrDefault();
+        if (BaseGrod.ContainsKey(newKey, true) || (item != null && item.Action != "D"))
+        {
+            MessageBox.Show("Key already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+        if (item != null)
+        {
+            item.Action = "C";
+            item.Value = "";
+            item.OldKey = null;
+            editListBox.Items.Remove($"{newKey} [D]");
+            editListBox.Items.Add($"{newKey} [C]");
+        }
+        else
+        {
+            EditItems.Add(new EditItem
+            {
+                Key = newKey,
+                Action = "A",
+                Value = ""
+            });
+            editListBox.Items.Add($"{newKey} [A]");
+            editListBox.SelectedItem = newKey;
+        }
+        DirtyFlag = true;
     }
 
     private void PlayMenuItem_Click(object? sender, EventArgs e)
@@ -109,31 +143,32 @@ public partial class FormMain
             {
                 if (editItem.Action == "A" || editItem.Action == "C")
                 {
-                    GrodBase.Set(editItem.Key, editItem.Value);
+                    BaseGrod.Set(editItem.Key, editItem.Value);
                     continue;
                 }
                 if (editItem.Action == "R")
                 {
-                    GrodBase.Remove(editItem.OldKey!, false);
-                    GrodBase.Set(editItem.Key, editItem.Value);
+                    BaseGrod.Remove(editItem.OldKey!, false);
+                    BaseGrod.Set(editItem.Key, editItem.Value);
                     continue;
                 }
                 if (editItem.Action == "D")
                 {
-                    GrodBase.Remove(editItem.Key, false);
+                    BaseGrod.Remove(editItem.Key, false);
                     continue;
                 }
                 MessageBox.Show($"Invalid Action {editItem.Action}", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
                 return;
             }
-            WriteGrif(Filename, GrodBase.Items(true, true), false);
+            WriteGrif(Filename, BaseGrod.Items(true, true), false);
             EditItems.Clear();
             editListBox.Items.Clear();
             if (File.Exists(FilenameEdit))
             {
                 File.Delete(FilenameEdit);
             }
-            PopulateTreeView(GrodBase);
+            DirtyFlag = false;
+            PopulateTreeView(BaseGrod);
         }
     }
 
@@ -149,7 +184,7 @@ public partial class FormMain
             return;
         }
         var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
-        tempText ??= GrodBase.Get(CurrentKey, false) ?? "";
+        tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
@@ -179,11 +214,7 @@ public partial class FormMain
 
     private void SaveMenuItem_Click(object? sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(FilenameEdit))
-        {
-            File.WriteAllText(FilenameEdit, JsonSerializer.Serialize(EditItems, JsonOptionsOutput));
-            MessageBox.Show($"Saved edits to {Path.GetFileName(FilenameEdit)}", "Save Edits", MessageBoxButtons.OK, MessageBoxIcon.None);
-        }
+        SaveEditItems();
     }
 
     private void ExitMenuItem_Click(object? sender, EventArgs e)
@@ -198,7 +229,7 @@ public partial class FormMain
             return;
         }
         var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
-        tempText ??= GrodBase.Get(CurrentKey, false) ?? "";
+        tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
         EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);

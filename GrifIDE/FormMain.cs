@@ -1,9 +1,9 @@
+using System.Text.Json;
 using static Grif.Dags;
 using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Routines;
-using System.Text.Json;
 
 namespace GrifIDE;
 
@@ -52,14 +52,15 @@ public partial class FormMain : Form
                 FilenameEdit = GetEditFilename();
                 SaveConfig();
                 var content = ReadGrif(Filename);
-                GrodBase.Clear(true);
-                GrodBase.AddItems(content);
+                BaseGrod.Clear(true);
+                BaseGrod.AddItems(content);
                 EditItems.Clear();
                 if (File.Exists(FilenameEdit))
                 {
                     EditItems = JsonSerializer.Deserialize<List<EditItem>>(File.ReadAllText(FilenameEdit)) ?? [];
                 }
-                PopulateTreeView(GrodBase);
+                DirtyFlag = false;
+                PopulateTreeView(BaseGrod);
                 PopulateEditList(EditItems);
                 editListBox.SuspendLayout();
                 foreach (var item in content)
@@ -68,15 +69,16 @@ public partial class FormMain : Form
                     {
                         if (!ValidateScript(item.Value))
                         {
-                            if (!editListBox.Items.Contains(item.Key))
+                            if (!EditItems.Any(x => x.Key == item.Key))
                             {
-                                editListBox.Items.Add(item.Key);
+                                editListBox.Items.Add($"{item.Key} [C]");
                                 EditItems.Add(new EditItem
                                 {
                                     Action = "C",
                                     Key = item.Key,
                                     Value = item.Value,
                                 });
+                                DirtyFlag = true;
                             }
                         }
                     }
@@ -88,6 +90,22 @@ public partial class FormMain : Form
         catch (Exception)
         {
             MessageBox.Show($"Error opening file: {filename}", "Error", MessageBoxButtons.OK);
+        }
+    }
+
+    private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (e.CloseReason == CloseReason.UserClosing && DirtyFlag)
+        {
+            var result = MessageBox.Show("Do you want to save your edits before exiting?", "Save Edits", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes)
+            {
+                SaveEditItems();
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

@@ -15,7 +15,8 @@ public partial class FormMain
             Font = new Font(ListFontFamily, ListFontSize),
             BackColor = Color.FromName(ListColorBackground),
             ForeColor = Color.FromName(ListColorForeground),
-            Sorted = true
+            Sorted = true,
+            IntegralHeight = false
         };
         editListBox.SelectedIndexChanged += EditListBox_SelectedIndexChanged;
         panelMain.Controls.Add(editListBox);
@@ -25,7 +26,7 @@ public partial class FormMain
     {
         if (editListBox.SelectedIndex >= 0)
         {
-            CurrentKey = editListBox.Items[editListBox.SelectedIndex]?.ToString();
+            CurrentKey = editListBox.Items[editListBox.SelectedIndex]?.ToString()?.Split(' ')[0];
             if (!string.IsNullOrEmpty(CurrentKey))
             {
                 var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
@@ -43,7 +44,7 @@ public partial class FormMain
         editListBox.Items.Clear();
         foreach (var item in EditItems)
         {
-            editListBox.Items.Add(item.Key);
+            editListBox.Items.Add($"{item.Key} [{item.Action}]");
         }
         editListBox.ResumeLayout();
     }

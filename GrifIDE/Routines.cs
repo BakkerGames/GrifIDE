@@ -1,4 +1,5 @@
-﻿using Grif;
+﻿using System.Text.Json;
+using Grif;
 using static Grif.Common;
 using static GrifIDE.Common;
 using static GrifIDE.Options;
@@ -80,5 +81,17 @@ internal static class Routines
     internal static string GetEditFilename()
     {
         return Path.Combine(GetDocumentsFolder(), Path.GetFileNameWithoutExtension(Filename) + ".grifedit");
+    }
+
+    internal static void SaveEditItems()
+    {
+        if (string.IsNullOrEmpty(FilenameEdit) || !DirtyFlag)
+        {
+            return;
+        }
+        var json = JsonSerializer.Serialize(EditItems, JsonOptionsOutput);
+        File.WriteAllText(FilenameEdit, json);
+        DirtyFlag = false;
+        MessageBox.Show($"Saved edits to {Path.GetFileName(FilenameEdit)}", "Save Edits", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 }

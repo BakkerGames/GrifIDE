@@ -25,21 +25,27 @@ public partial class FormMain
     {
         if (EditLoading) return;
         if (CurrentKey == null) return;
-        foreach (var item in editListBox.Items)
+        var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (tempItem != null)
         {
-            if (item.ToString() == CurrentKey)
+            if (tempItem.Action == "D")
             {
-                var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault() ?? new();
-                tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
-                return;
+                editListBox.Items.Remove($"{CurrentKey} [D]");
+                editListBox.Items.Add($"{CurrentKey} [C]");
+                tempItem.Action = "C";
             }
+            tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
         }
-        editListBox.Items.Add(CurrentKey);
-        EditItems.Add(new EditItem
+        else
         {
-            Action = "C",
-            Key = CurrentKey,
-            Value = UnformatTextFromEdit(editRichTextBox.Text),
-        });
+            EditItems.Add(new EditItem
+            {
+                Action = "C",
+                Key = CurrentKey,
+                Value = UnformatTextFromEdit(editRichTextBox.Text),
+            });
+            editListBox.Items.Add($"{CurrentKey} [C]");
+        }
+        DirtyFlag = true;
     }
 }

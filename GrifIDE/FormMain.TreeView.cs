@@ -38,7 +38,7 @@ public partial class FormMain
             }
             else
             {
-                var grodValue = GrodBase.Get(CurrentKey, true);
+                var grodValue = BaseGrod.Get(CurrentKey, true);
                 if (grodValue != null)
                 {
                     editRichTextBox.Text = FormatTextForEdit(grodValue);

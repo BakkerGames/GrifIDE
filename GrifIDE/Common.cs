@@ -5,7 +5,7 @@ namespace GrifIDE;
 
 public static class Common
 {
-    public const string VERSION = "0.1.0";
+    public const string VERSION = "0.2025.1115";
     public const string IDE_APP_NAME = "GrifIDE";
     public const string CONFIG_FILENAME = "config.json";
 
@@ -20,9 +20,10 @@ public static class Common
     public const int MIN_LIST_PANEL_WIDTH = 200;
     public const int DEFAULT_LIST_PANEL_WIDTH = 300;
 
-    public static Grod GrodBase { get; set; } = new("base");
-    public static Grod GrodConfig { get; set; } = new("config");
+    public static Grod BaseGrod { get; set; } = new("base");
+    public static Grod ConfigGrod { get; set; } = new("config");
 
+    public static bool DirtyFlag { get; set; } = false;
     public static List<EditItem> EditItems { get; set; } = [];
 
     public static string? Filename { get; set; }

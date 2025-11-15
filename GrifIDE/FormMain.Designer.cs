@@ -40,6 +40,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "GRIF IDE";
             WindowState = FormWindowState.Maximized;
+            FormClosing += FormMain_FormClosing;
             Load += FormMain_Load;
             ResumeLayout(false);
         }

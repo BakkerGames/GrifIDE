@@ -59,7 +59,7 @@ public partial class FormMain : Form
                 {
                     EditItems = JsonSerializer.Deserialize<List<EditItem>>(File.ReadAllText(FilenameEdit)) ?? [];
                 }
-                DirtyFlag = false;
+                SetDirtyFlag(false);
                 PopulateTreeView(BaseGrod);
                 PopulateEditList(EditItems);
                 editListBox.SuspendLayout();
@@ -101,11 +101,20 @@ public partial class FormMain : Form
             if (result == DialogResult.Yes)
             {
                 SaveEditItems();
+                SetDirtyFlag(false);
             }
             else if (result == DialogResult.Cancel)
             {
                 e.Cancel = true;
             }
         }
+    }
+
+    private void SetDirtyFlag(bool flag)
+    {
+        DirtyFlag = flag;
+        var changed = DirtyFlag ? "*" : "";
+        this.Text = $"GrifIDE - {Path.GetFileName(Filename)}{changed}";
+
     }
 }

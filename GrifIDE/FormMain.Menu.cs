@@ -33,14 +33,15 @@ public partial class FormMain
         // Edit Menu
         var editMenuItem = new ToolStripMenuItem("&Edit");
         var addMenuItem = new ToolStripMenuItem("&Add", null, AddMainMenuItem_Click);
+        var renameMenuItem = new ToolStripMenuItem("&Rename", null, RenameMenuItem_Click, Keys.Control | Keys.R);
         var deleteMenuItem = new ToolStripMenuItem("&Delete", null, DeleteMenuItem_Click);
-        var renameMenuItem = new ToolStripMenuItem("&Rename", null, RenameMenuItem_Click);
+        var uneditMenuItem = new ToolStripMenuItem("&Unedit", null, UneditMenuItem_Click);
         var formatMenuItem = new ToolStripMenuItem("&Format", null, FormatMenuItem_Click, Keys.F4);
         editMenuItem.DropDownItems.AddRange(
         [
             addMenuItem,
-            deleteMenuItem,
             renameMenuItem,
+            deleteMenuItem,
             new ToolStripSeparator(),
             formatMenuItem,
         ]);
@@ -73,14 +74,21 @@ public partial class FormMain
         this.MainMenuStrip = menuStripMain;
     }
 
-    private void RenameMenuItem_Click(object? sender, EventArgs e)
+    private void UneditMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("Rename is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
-    }
-
-    private void DeleteMenuItem_Click(object? sender, EventArgs e)
-    {
-        MessageBox.Show("Delete is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+        if (CurrentKey == null) { return; }
+        var response = MessageBox.Show($"Are you sure you want to discard changes for {CurrentKey}?", $"Unedit {CurrentKey}", MessageBoxButtons.YesNo);
+        if (response == DialogResult.No) { return; }
+        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (item == null)
+        {
+            MessageBox.Show($"Key not found: {CurrentKey}", "Not Found", MessageBoxButtons.OK);
+            return;
+        }
+        SetDirtyFlag(true);
+        editListBox.SelectedIndex = -1;
+        editListBox.Items.Remove($"{item.Key} [{item.Action}]");
+        EditItems.Remove(item);
     }
 
     private void AddMainMenuItem_Click(object? sender, EventArgs e)
@@ -90,22 +98,25 @@ public partial class FormMain
         {
             return;
         }
-        if (string.IsNullOrEmpty(newKey))
+        if (string.IsNullOrWhiteSpace(newKey))
         {
-            MessageBox.Show("Key cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Key cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
             return;
         }
+        newKey = newKey.Trim();
         var item = EditItems.Where(x => x.Key == newKey).FirstOrDefault();
         if (BaseGrod.ContainsKey(newKey, true) || (item != null && item.Action != "D"))
         {
-            MessageBox.Show("Key already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Key already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
             return;
         }
+        SetDirtyFlag(true);
         if (item != null)
         {
             item.Action = "C";
             item.Value = "";
             item.OldKey = null;
+            editListBox.SelectedIndex = -1;
             editListBox.Items.Remove($"{newKey} [D]");
             editListBox.Items.Add($"{newKey} [C]");
         }
@@ -117,9 +128,108 @@ public partial class FormMain
                 Action = "A",
                 Value = ""
             });
+            editListBox.SelectedIndex = -1;
             editListBox.Items.Add($"{newKey} [A]");
             editListBox.SelectedItem = newKey;
         }
+    }
+
+    private void RenameMenuItem_Click(object? sender, EventArgs e)
+    {
+        if (CurrentKey == null)
+        {
+            return;
+        }
+        var newKey = InputBox.Show("Rename Key", $"Enter new key for {CurrentKey}:", CurrentKey);
+        if (string.IsNullOrWhiteSpace(newKey))
+        {
+            return;
+        }
+        newKey = newKey.Trim();
+        if (newKey == CurrentKey)
+        {
+            MessageBox.Show("Must enter a different key to rename", "Keys match", MessageBoxButtons.OK);
+            return;
+        }
+        var newItem = EditItems.Where(x => x.Key == newKey).FirstOrDefault();
+        var existingKey = BaseGrod.Keys(true, false).Where(x => x == newKey).FirstOrDefault();
+        if (newItem != null || existingKey != null)
+        {
+            MessageBox.Show("New key already exists", "Error", MessageBoxButtons.OK);
+            return;
+        }
+        SetDirtyFlag(true);
+        var oldItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (oldItem != null)
+        {
+            editListBox.SelectedIndex = -1;
+            editListBox.Items.Remove($"{oldItem.Key} [{oldItem.Action}]");
+            editListBox.Items.Add($"{newKey} [R]");
+            if (oldItem.Action != "R")
+            {
+                oldItem.OldKey = CurrentKey;
+            }
+            oldItem.Action = "R";
+            oldItem.Key = newKey;
+            return;
+        }
+        editListBox.SelectedIndex = -1;
+        editListBox.Items.Add($"{newKey} [R]");
+        EditItems.Add(new EditItem
+        {
+            Key = newKey,
+            Action = "R",
+            Value = BaseGrod.Get(CurrentKey, true),
+            OldKey = CurrentKey,
+        });
+    }
+
+    private void DeleteMenuItem_Click(object? sender, EventArgs e)
+    {
+        var delKey = InputBox.Show("Delete Key", "Enter key to delete:", CurrentKey);
+        if (string.IsNullOrWhiteSpace(delKey))
+        {
+            return;
+        }
+        delKey = delKey.Trim();
+        var item = EditItems.Where(x => x.Key == delKey).FirstOrDefault();
+        var existingKey = BaseGrod.Keys(true, false).Where(x => x == delKey).FirstOrDefault();
+        if (item == null)
+        {
+            if (existingKey == null)
+            {
+                MessageBox.Show("Key does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
+                return;
+            }
+            item = new EditItem
+            {
+                Key = delKey,
+                Action = "D",
+                Value = null
+            };
+        }
+        else
+        {
+            if (!EditItems.Remove(item))
+            {
+                MessageBox.Show("Failed to remove existing edit item.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
+                return;
+            }
+            editListBox.SelectedIndex = -1;
+            editListBox.Items.Remove($"{delKey} [{item.Action}]");
+            SetDirtyFlag(true);
+        }
+        if (item.Action == "R")
+        {
+            // If it was renamed, just cancel the rename
+            return;
+        }
+        item.Action = "D";
+        item.Value = null;
+        item.OldKey = null;
+        editListBox.SelectedIndex = -1;
+        editListBox.Items.Add($"{delKey} [{item.Action}]");
+        EditItems.Add(item);
         DirtyFlag = true;
     }
 
@@ -148,7 +258,7 @@ public partial class FormMain
                 }
                 if (editItem.Action == "R")
                 {
-                    BaseGrod.Remove(editItem.OldKey!, false);
+                    BaseGrod.Remove(editItem.OldKey!, true);
                     BaseGrod.Set(editItem.Key, editItem.Value);
                     continue;
                 }
@@ -167,7 +277,7 @@ public partial class FormMain
             {
                 File.Delete(FilenameEdit);
             }
-            DirtyFlag = false;
+            SetDirtyFlag(false);
             PopulateTreeView(BaseGrod);
         }
     }
@@ -215,6 +325,7 @@ public partial class FormMain
     private void SaveMenuItem_Click(object? sender, EventArgs e)
     {
         SaveEditItems();
+        SetDirtyFlag(false);
     }
 
     private void ExitMenuItem_Click(object? sender, EventArgs e)
@@ -228,7 +339,12 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
+        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (item == null)
+        {
+            return;
+        }
+        var tempText = item?.Value;
         tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
         EditLoading = true;
         editRichTextBox.Clear();

@@ -91,7 +91,6 @@ internal static class Routines
         }
         var json = JsonSerializer.Serialize(EditItems, JsonOptionsOutput);
         File.WriteAllText(FilenameEdit, json);
-        DirtyFlag = false;
         MessageBox.Show($"Saved edits to {Path.GetFileName(FilenameEdit)}", "Save Edits", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
 }

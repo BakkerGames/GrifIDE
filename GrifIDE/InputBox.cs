@@ -20,16 +20,20 @@ public partial class InputBox : Form
     public string InputText
     {
         get => textBoxInput.Text;
-        set => textBoxInput.Text = value;
+        set
+        {
+            textBoxInput.Text = value;
+            textBoxInput.SelectionStart = value.Length;
+        }
     }
 
-    public static string? Show(string title, string prompt, string defaultInput = "")
+    public static string? Show(string title, string prompt, string? defaultInput = null)
     {
         using var inputBox = new InputBox
         {
             Text = title,
             Prompt = prompt,
-            InputText = defaultInput
+            InputText = defaultInput ?? ""
         };
         return inputBox.ShowDialog() == DialogResult.OK ? inputBox.InputText : null;
     }

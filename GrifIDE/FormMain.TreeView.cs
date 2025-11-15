@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Grif;
+﻿using Grif;
 using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;

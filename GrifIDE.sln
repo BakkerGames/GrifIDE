@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrifIDE", "GrifIDE\GrifIDE.csproj", "{7D459A32-5F23-4E4B-832D-0600F3E1FB44}"
 EndProject
@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		DesignDocs\DesignLog.txt = DesignDocs\DesignLog.txt
+		DesignDocs\Todo.txt = DesignDocs\Todo.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grif", "..\GRIF2\Grif\Grif.csproj", "{56890242-DECC-394A-1789-F011D459044E}"

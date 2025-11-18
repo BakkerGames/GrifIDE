@@ -1,0 +1,29 @@
+TODO list
+
+- Colorize tokens
+- Stack of mods
+- Which file/mod gets merge? Ask?
+- Merge individual items?
+- Show diffs?
+- Form Play
+- Debug / Step mode
+- Show values when changed
+- Log of changes???
+- Immediate mode window
+- Finish fixing @endif aaa bbb
+- Help, including token list/syntax
+- Make token list/syntxt a searchable list
+- Insert structure like @if...@endif
+- Find/Replace
+- Verify menu item
+- Config form
+- Recent files menu
+- Look for save/restore/reset bugs
+- New Game starting values
+- __config.* use in GRIF2
+_ !version or @!version or @version or system.version?
+
+- New commands:
+@min() / @max()
+@while condition @do ... @endwhile
+@arrays - do they still work? Remove [ ] logic?

@@ -1,5 +1,6 @@
 TODO list
 
+- Play backspace bug between "\n" and "\r\n"
 - Colorize tokens
 - Stack of mods
 - Which file/mod gets merge? Ask?
@@ -21,7 +22,7 @@ TODO list
 - Look for save/restore/reset bugs
 - New Game starting values
 - __config.* use in GRIF2
-_ !version or @!version or @version or system.version?
+X system.version
 
 - New commands:
 @min() / @max()

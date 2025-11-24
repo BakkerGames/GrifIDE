@@ -271,6 +271,7 @@ public partial class FormMain
                 return;
             }
             WriteGrif(Filename, BaseGrod.Items(true, true), false);
+            editRichTextBox.Text = "";
             EditItems.Clear();
             editListBox.Items.Clear();
             if (File.Exists(FilenameEdit))

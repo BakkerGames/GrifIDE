@@ -1,0 +1,130 @@
+// Source - https://stackoverflow.com/a/1926822
+// Posted by Nathan Baulch, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-24, License - CC BY-SA 2.5
+
+public static class RichTextBoxExtensions
+{
+    public static void AppendText(this RichTextBox box, string text, Color color)
+    {
+        box.SelectionStart = box.TextLength;
+        box.SelectionLength = 0;
+
+        box.SelectionColor = color;
+        box.AppendText(text);
+        box.SelectionColor = box.ForeColor;
+    }
+
+	// Source - https://stackoverflow.com/a/32851608
+	// Posted by Renan F., modified by community. See post 'Timeline' for change history
+	// Retrieved 2025-11-24, License - CC BY-SA 3.0
+
+	public static void AppendText(this RichTextBox box, string text, Color color, Font font)
+	{
+		box.SelectionStart = box.TextLength;
+		box.SelectionLength = 0;
+
+		box.SelectionColor = color;
+		box.SelectionFont = font;
+		box.AppendText(text);
+		box.SelectionColor = box.ForeColor;
+	}
+}
+
+
+
+// Source - https://stackoverflow.com/a/1926822
+// Posted by Nathan Baulch, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-24, License - CC BY-SA 2.5
+
+var userid = "USER0001";
+var message = "Access denied";
+var box = new RichTextBox
+              {
+                  Dock = DockStyle.Fill,
+                  Font = new Font("Courier New", 10)
+              };
+
+box.AppendText("[" + DateTime.Now.ToShortTimeString() + "]", Color.Red);
+box.AppendText(" ");
+box.AppendText(userid, Color.Green);
+box.AppendText(": ");
+box.AppendText(message, Color.Blue);
+box.AppendText(Environment.NewLine);
+
+new Form {Controls = {box}}.ShowDialog();
+
+// Source - https://stackoverflow.com/a/42273746
+// Posted by tedebus, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-24, License - CC BY-SA 4.0
+
+public void AppendText(string text, Color color, bool addNewLine = false)
+{
+    box.SuspendLayout();
+    box.SelectionColor = color;
+    box.AppendText(addNewLine
+        ? $"{text}{Environment.NewLine}"
+        : text);
+    box.ScrollToCaret();
+    box.ResumeLayout();
+}
+
+// Source - https://stackoverflow.com/a/49174426
+// Posted by Elo, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-24, License - CC BY-SA 4.0
+
+        Run run = new Run("This is my text");
+        run.Foreground = new SolidColorBrush(Colors.Red); // My Color
+        Paragraph paragraph = new Paragraph(run);
+        MyRichTextBlock.Document.Blocks.Add(paragraph);
+
+// Source - https://stackoverflow.com/a/53692854
+// Posted by MiMFa, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-24, License - CC BY-SA 4.0
+
+public static RichTextBox RichTextBoxChangeWordColor(ref RichTextBox rtb, string startWord, string endWord, Color color)
+{
+    rtb.SuspendLayout();
+    Point scroll = rtb.AutoScrollOffset;
+    int slct = rtb.SelectionIndent;
+    int ss = rtb.SelectionStart;
+    List<Point> ls = GetAllWordsIndecesBetween(rtb.Text, startWord, endWord, true);
+    foreach (var item in ls)
+    {
+        rtb.SelectionStart = item.X;
+        rtb.SelectionLength = item.Y - item.X;
+        rtb.SelectionColor = color;
+    }
+    rtb.SelectionStart = ss;
+    rtb.SelectionIndent = slct;
+    rtb.AutoScrollOffset = scroll;
+    rtb.ResumeLayout(true);
+    return rtb;
+}
+
+public static List<Point> GetAllWordsIndecesBetween(string intoText, string fromThis, string toThis,bool withSigns = true)
+{
+    List<Point> result = new List<Point>();
+    Stack<int> stack = new Stack<int>();
+    bool start = false;
+    for (int i = 0; i < intoText.Length; i++)
+    {
+        string ssubstr = intoText.Substring(i);
+        if (ssubstr.StartsWith(fromThis) && ((fromThis == toThis && !start) || !ssubstr.StartsWith(toThis)))
+        {
+            if (!withSigns) i += fromThis.Length;
+            start = true;
+            stack.Push(i);
+        }
+        else if (ssubstr.StartsWith(toThis) )
+        {
+            if (withSigns) i += toThis.Length;
+            start = false;
+            if (stack.Count > 0)
+            {
+                int startindex = stack.Pop();
+                result.Add(new Point(startindex,i));
+            }
+        }
+    }
+    return result;
+}

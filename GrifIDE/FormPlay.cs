@@ -1,74 +1,36 @@
-﻿using System.ComponentModel;
+﻿using static GrifIDE.Common;
 
 namespace GrifIDE;
 
 public partial class FormPlay : Form
 {
-    private string playText = string.Empty;
-
     public FormPlay()
     {
         InitializeComponent();
+        Initialize();
     }
 
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Font PlayFont
+    public void Initialize()
     {
-        get => textBoxMain.Font;
-        set => textBoxMain.Font = value;
-
+        textBoxInput.Font = new Font(DEFAULT_FONT_FAMILY, DEFAULT_TEXT_FONT_SIZE);
+        textBoxInput.ForeColor = Color.FromName(DEFAULT_COLOR_FOREGROUND);
+        textBoxInput.BackColor = Color.FromName(DEFAULT_COLOR_BACKGROUND);
+        textBoxInput.Clear();
+        richTextBoxOutput.Font = new Font(DEFAULT_FONT_FAMILY, DEFAULT_TEXT_FONT_SIZE);
+        richTextBoxOutput.ForeColor = Color.FromName(DEFAULT_COLOR_FOREGROUND);
+        richTextBoxOutput.BackColor = Color.FromName(DEFAULT_COLOR_BACKGROUND);
+        richTextBoxOutput.Clear();
     }
 
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Color PlayBackColor
+    private void textBoxInput_KeyPress(object sender, KeyPressEventArgs e)
     {
-        get => textBoxMain.BackColor;
-        set => textBoxMain.BackColor = value;
-
-    }
-
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Color PlayForeColor
-    {
-        get => textBoxMain.ForeColor;
-        set => textBoxMain.ForeColor = value;
-
-    }
-
-    private void FormPlay_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        if (e.KeyChar == '\b')
+        if (e.KeyChar == (char)Keys.Enter)
         {
-            if (playText.Length > 0)
-            {
-                playText = playText[..^1];
-                textBoxMain.Text = textBoxMain.Text[..^1];
-                textBoxMain.SelectionStart = textBoxMain.Text.Length;
-            }
-            return;
+            e.Handled = true; // Prevent the beep sound on Enter key press
+            richTextBoxOutput.AppendText(textBoxInput.Text);
+            richTextBoxOutput.AppendText(Environment.NewLine);
+            richTextBoxOutput.ScrollToCaret();
+            textBoxInput.Clear();
         }
-        if (e.KeyChar == '\r' || e.KeyChar == '\n')
-        {
-            if (playText.Length > 0)
-            {
-               
-                textBoxMain.AppendText(Environment.NewLine);
-            }
-            return;
-        }
-        if (char.IsControl(e.KeyChar))
-        {
-            return;
-        }
-        if (ModifierKeys.HasFlag(Keys.Control))
-        {
-            return;
-        }
-        if (ModifierKeys.HasFlag(Keys.Alt))
-        {
-            return;
-        }
-        playText += e.KeyChar;
-        textBoxMain.AppendText(e.KeyChar.ToString());
     }
 }

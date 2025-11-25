@@ -28,38 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxMain = new TextBox();
+            textBoxInput = new TextBox();
+            richTextBoxOutput = new RichTextBox();
             SuspendLayout();
             // 
-            // textBoxMain
+            // textBoxInput
             // 
-            textBoxMain.BackColor = Color.Black;
-            textBoxMain.Dock = DockStyle.Fill;
-            textBoxMain.ForeColor = Color.White;
-            textBoxMain.Location = new Point(0, 0);
-            textBoxMain.Multiline = true;
-            textBoxMain.Name = "textBoxMain";
-            textBoxMain.ReadOnly = true;
-            textBoxMain.ScrollBars = ScrollBars.Vertical;
-            textBoxMain.Size = new Size(800, 450);
-            textBoxMain.TabIndex = 0;
+            textBoxInput.AcceptsReturn = true;
+            textBoxInput.BackColor = Color.Black;
+            textBoxInput.Dock = DockStyle.Bottom;
+            textBoxInput.Font = new Font("Consolas", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxInput.ForeColor = Color.White;
+            textBoxInput.Location = new Point(0, 731);
+            textBoxInput.Name = "textBoxInput";
+            textBoxInput.Size = new Size(1184, 30);
+            textBoxInput.TabIndex = 0;
+            textBoxInput.KeyPress += textBoxInput_KeyPress;
+            // 
+            // richTextBoxOutput
+            // 
+            richTextBoxOutput.BackColor = Color.Black;
+            richTextBoxOutput.Dock = DockStyle.Fill;
+            richTextBoxOutput.Font = new Font("Consolas", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            richTextBoxOutput.ForeColor = Color.White;
+            richTextBoxOutput.Location = new Point(0, 0);
+            richTextBoxOutput.Name = "richTextBoxOutput";
+            richTextBoxOutput.ReadOnly = true;
+            richTextBoxOutput.Size = new Size(1184, 731);
+            richTextBoxOutput.TabIndex = 1;
+            richTextBoxOutput.TabStop = false;
+            richTextBoxOutput.Text = "";
             // 
             // FormPlay
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(textBoxMain);
-            KeyPreview = true;
+            ClientSize = new Size(1184, 761);
+            Controls.Add(richTextBoxOutput);
+            Controls.Add(textBoxInput);
             Name = "FormPlay";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "FormPlay";
-            KeyPress += FormPlay_KeyPress;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private TextBox textBoxMain;
+        private TextBox textBoxInput;
+        private RichTextBox richTextBoxOutput;
     }
 }

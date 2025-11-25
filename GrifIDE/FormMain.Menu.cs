@@ -238,9 +238,9 @@ public partial class FormMain
         var formPlay = new FormPlay
         {
             StartPosition = FormStartPosition.CenterParent,
-            PlayFont = new Font(TextFontFamily, TextFontSize),
-            PlayBackColor = Color.FromName(TextColorBackground),
-            PlayForeColor = Color.FromName(TextColorForeground)
+            //PlayFont = new Font(TextFontFamily, TextFontSize),
+            //PlayBackColor = Color.FromName(TextColorBackground),
+            //PlayForeColor = Color.FromName(TextColorForeground)
         };
         formPlay.ShowDialog(this);
     }

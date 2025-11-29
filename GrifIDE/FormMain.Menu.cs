@@ -1,4 +1,6 @@
-﻿using static Grif.IO;
+﻿using Grif;
+using static Grif.IO;
+using static Grif.Common;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
@@ -238,38 +240,21 @@ public partial class FormMain
         var formPlay = new FormPlay
         {
             StartPosition = FormStartPosition.CenterParent,
-            //PlayFont = new Font(TextFontFamily, TextFontSize),
-            //PlayBackColor = Color.FromName(TextColorBackground),
-            //PlayForeColor = Color.FromName(TextColorForeground)
+            Text = BaseGrod.Get(GAMETITLE, true) ?? BaseGrod.Get(GAMENAME, true) ?? "Play Grif Game"
         };
-        formPlay.ShowDialog(this);
+        var playGrod = new Grod();
+        playGrod.AddItems(BaseGrod.Items(true, true));
+        MergeEditItems(playGrod);
+        formPlay.SetGrodBase(playGrod);
+        formPlay.SetGrodOverlay(new Grod());
+        formPlay.Show(this);
     }
 
     private void MergeMenuItem_Click(object? sender, EventArgs e)
     {
         if (!string.IsNullOrEmpty(Filename) && EditItems.Count > 0)
         {
-            foreach (var editItem in EditItems)
-            {
-                if (editItem.Action == "A" || editItem.Action == "C")
-                {
-                    BaseGrod.Set(editItem.Key, editItem.Value);
-                    continue;
-                }
-                if (editItem.Action == "R")
-                {
-                    BaseGrod.Remove(editItem.OldKey!, true);
-                    BaseGrod.Set(editItem.Key, editItem.Value);
-                    continue;
-                }
-                if (editItem.Action == "D")
-                {
-                    BaseGrod.Remove(editItem.Key, false);
-                    continue;
-                }
-                MessageBox.Show($"Invalid Action {editItem.Action}", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
-                return;
-            }
+            MergeEditItems(BaseGrod);
             WriteGrif(Filename, BaseGrod.Items(true, true), false);
             editRichTextBox.Text = "";
             EditItems.Clear();
@@ -280,6 +265,33 @@ public partial class FormMain
             }
             SetDirtyFlag(false);
             PopulateTreeView(BaseGrod);
+        }
+    }
+
+    private static void MergeEditItems(Grod grod)
+    {
+        if (grod == null)
+        {
+            return;
+        }
+        foreach (var editItem in EditItems)
+        {
+            if (editItem.Action == "A" || editItem.Action == "C")
+            {
+                grod.Set(editItem.Key, editItem.Value);
+                continue;
+            }
+            if (editItem.Action == "R")
+            {
+                grod.Remove(editItem.OldKey!, true);
+                grod.Set(editItem.Key, editItem.Value);
+                continue;
+            }
+            if (editItem.Action == "D")
+            {
+                grod.Remove(editItem.Key, true);
+                continue;
+            }
         }
     }
 

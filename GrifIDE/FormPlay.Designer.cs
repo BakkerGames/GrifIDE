@@ -43,7 +43,7 @@
             textBoxInput.Name = "textBoxInput";
             textBoxInput.Size = new Size(1184, 30);
             textBoxInput.TabIndex = 0;
-            textBoxInput.KeyPress += textBoxInput_KeyPress;
+            textBoxInput.KeyPress += TextBoxInput_KeyPress;
             // 
             // richTextBoxOutput
             // 
@@ -69,6 +69,7 @@
             Name = "FormPlay";
             StartPosition = FormStartPosition.CenterParent;
             Text = "FormPlay";
+            Shown += FormPlay_Shown;
             ResumeLayout(false);
             PerformLayout();
         }

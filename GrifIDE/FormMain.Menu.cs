@@ -247,7 +247,7 @@ public partial class FormMain
         MergeEditItems(playGrod);
         formPlay.SetGrodBase(playGrod);
         formPlay.SetGrodOverlay(new Grod());
-        formPlay.Show(this);
+        formPlay.Show();
     }
 
     private void MergeMenuItem_Click(object? sender, EventArgs e)

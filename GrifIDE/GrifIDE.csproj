@@ -10,10 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <StartupObject>GrifIDE.Program</StartupObject>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <Version>2.2025.1204</Version>
+    <Version>2.2025.1205</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

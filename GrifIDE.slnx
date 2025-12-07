@@ -7,6 +7,6 @@
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="../GRIF2/Grif/Grif.csproj" />
-  <Project Path="GrifIDE/GrifIDE.csproj" />
+  <Project Path="../grif2/grif/grif.csproj" DisplayName="grif" />
+  <Project Path="grifide/grifide.csproj" DisplayName="grifide" />
 </Solution>

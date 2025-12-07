@@ -80,7 +80,7 @@ internal static class Routines
 
     internal static string GetEditFilename()
     {
-        return Path.Combine(GetDocumentsFolder(), Path.GetFileNameWithoutExtension(Filename) + ".grifedit");
+        return Path.Combine(Path.GetDirectoryName(Filename) ?? "", Path.GetFileNameWithoutExtension(Filename) + ".grifedit");
     }
 
     internal static void SaveEditItems()

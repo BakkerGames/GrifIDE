@@ -5,8 +5,8 @@ namespace GrifIDE;
 
 public static class Common
 {
-    public const string VERSION = "0.2025.1129";
-    public const string IDE_APP_NAME = "GrifIDE";
+    public const string VERSION = "0.2025.1206";
+    public const string IDE_APP_NAME = "GRIF IDE";
     public const string CONFIG_FILENAME = "config.json";
 
     public const int DEFAULT_TAB_WIDTH = 4;

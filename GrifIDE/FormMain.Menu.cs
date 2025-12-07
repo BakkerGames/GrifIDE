@@ -316,7 +316,23 @@ public partial class FormMain
 
     private void NewMenuItem_Click(object? sender, EventArgs e)
     {
-        MessageBox.Show("New is not implemented yet.", "New", MessageBoxButtons.OK, MessageBoxIcon.None);
+        SaveFileDialog sfd = new()
+        {
+            Filter = "Grif Files (*.grif)|*.grif",
+            Title = "Create New Grif File",
+            FilterIndex = 0,
+            FileName = "new.grif"
+        };
+        if (sfd.ShowDialog() == DialogResult.OK)
+        {
+            Filename = sfd.FileName;
+            BaseGrod = new Grod();
+            EditItems.Clear();
+            editListBox.Items.Clear();
+            editRichTextBox.Clear();
+            SetDirtyFlag(false);
+            PopulateTreeView(BaseGrod);
+        }
     }
 
     private void OpenMenuItem_Click(object? sender, EventArgs e)

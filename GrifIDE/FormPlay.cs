@@ -10,7 +10,7 @@ public partial class FormPlay : Form
     private Grod grodBase = new();
     private Grod grodOverlay = new();
     private int outputCount = 0;
-    private int maxOutputWidth = 0;
+    private long maxOutputWidth = 0;
 
     private readonly Queue<string> _inputQueue = new();
 
@@ -35,7 +35,7 @@ public partial class FormPlay : Form
     public void SetGrodBase(Grod grod)
     {
         grodBase = grod;
-        maxOutputWidth = grodBase.GetInt(OUTPUT_WIDTH, true) ?? 0;
+        maxOutputWidth = grodBase.GetNumber(OUTPUT_WIDTH, true) ?? 0;
     }
 
     public void SetGrodOverlay(Grod grod)

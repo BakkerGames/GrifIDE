@@ -42,3 +42,6 @@ GRIF IDE Design Logs
 - Add new item.
 - Display each item's Action in edit list box.
 - Change "D" to "C" when adding a deleted item back.
+
+2025-12-20
+- Use new GRIF2 IFGame class.

@@ -56,7 +56,7 @@ public partial class FormPlay : Form
 
     private async void FormPlay_Shown(object sender, EventArgs e)
     {
-        var game = new Game();
+        var game = new IFGame();
         game.Initialize(grodBase, "savegame.sav");
         game.InputEvent += Input;
         game.OutputEvent += Output;
@@ -67,7 +67,7 @@ public partial class FormPlay : Form
 
     private void Input(object sender)
     {
-        OutputText(((Game)sender).Prompt() ?? "");
+        OutputText(((IFGame)sender).Prompt() ?? "");
         string? input;
         while (_inputQueue.Count == 0)
         {
@@ -78,8 +78,8 @@ public partial class FormPlay : Form
         if (input != null)
         {
             var message = new GrifMessage(MessageType.Text, input);
-            ((Game)sender).InputMessages.Enqueue(message);
-            OutputText(((Game)sender).AfterPrompt() ?? "");
+            ((IFGame)sender).InputMessages.Enqueue(message);
+            OutputText(((IFGame)sender).AfterPrompt() ?? "");
         }
     }
 

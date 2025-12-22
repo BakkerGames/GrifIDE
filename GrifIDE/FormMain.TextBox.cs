@@ -48,4 +48,14 @@ public partial class FormMain
         }
         DirtyFlag = true;
     }
+
+    private void SaveCurrentEdit()
+    {
+        if (CurrentKey == null) return;
+        var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (tempItem != null)
+        {
+            tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
+        }
+    }
 }

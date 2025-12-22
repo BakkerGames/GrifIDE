@@ -36,6 +36,11 @@ public partial class FormMain
                 EditLoading = false;
             }
         }
+        else
+        {
+            CurrentKey = null;
+            editRichTextBox.Clear();
+        }
     }
 
     private void PopulateEditList(List<EditItem> EditItems)

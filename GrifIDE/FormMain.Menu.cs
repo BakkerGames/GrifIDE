@@ -20,7 +20,7 @@ public partial class FormMain
         var newMenuItem = new ToolStripMenuItem("&New", null, NewMenuItem_Click);
         var openMenuItem = new ToolStripMenuItem("&Open", null, OpenMenuItem_Click);
         var saveMenuItem = new ToolStripMenuItem("&Save Edits", null, SaveMenuItem_Click, Keys.Control | Keys.S);
-        var mergeMenuItem = new ToolStripMenuItem("&Merge and save", null, MergeMenuItem_Click);
+        var mergeMenuItem = new ToolStripMenuItem("&Merge and save", null, MergeMenuItem_Click, Keys.Control | Keys.M);
         var exitMenuItem = new ToolStripMenuItem("E&xit", null, ExitMenuItem_Click);
         fileMenuItem.DropDownItems.AddRange(
         [
@@ -34,7 +34,7 @@ public partial class FormMain
         ]);
         // Edit Menu
         var editMenuItem = new ToolStripMenuItem("&Edit");
-        var addMenuItem = new ToolStripMenuItem("&Add", null, AddMainMenuItem_Click);
+        var addMenuItem = new ToolStripMenuItem("&Add", null, AddMainMenuItem_Click, Keys.Control | Keys.N);
         var renameMenuItem = new ToolStripMenuItem("&Rename", null, RenameMenuItem_Click, Keys.Control | Keys.R);
         var deleteMenuItem = new ToolStripMenuItem("&Delete", null, DeleteMenuItem_Click);
         var uneditMenuItem = new ToolStripMenuItem("&Unedit", null, UneditMenuItem_Click);
@@ -112,13 +112,16 @@ public partial class FormMain
             MessageBox.Show("Key already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
             return;
         }
+        SaveCurrentEdit();
+        editListBox.SelectedIndex = -1;
+        editRichTextBox.Clear();
+        CurrentKey = null;
         SetDirtyFlag(true);
         if (item != null)
         {
             item.Action = "C";
             item.Value = "";
             item.OldKey = null;
-            editListBox.SelectedIndex = -1;
             editListBox.Items.Remove($"{newKey} [D]");
             editListBox.Items.Add($"{newKey} [C]");
         }
@@ -130,10 +133,9 @@ public partial class FormMain
                 Action = "A",
                 Value = ""
             });
-            editListBox.SelectedIndex = -1;
             editListBox.Items.Add($"{newKey} [A]");
-            editListBox.SelectedItem = newKey;
         }
+        editListBox.SelectedItem = newKey;
     }
 
     private void RenameMenuItem_Click(object? sender, EventArgs e)

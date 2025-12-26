@@ -23,28 +23,30 @@ public partial class FormMain
 
     private void TreeView_AfterSelect(object? sender, EventArgs e)
     {
-        EditLoading = true;
-        editListBox.SelectedIndex = -1;
-        editRichTextBox.Clear();
         CurrentKey = null;
+        SetEditListBoxSelectedIndex(-1);
+        editRichTextBox.Clear();
         if (treeView.SelectedNode != null && !string.IsNullOrEmpty(treeView.SelectedNode.Name))
         {
             CurrentKey = treeView.SelectedNode.Name;
             var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
             if (tempItem != null)
             {
+                EditLoading = true;
                 editRichTextBox.Text = FormatTextForEdit(tempItem.Value);
+                EditLoading = false;
             }
             else
             {
                 var grodValue = BaseGrod.Get(CurrentKey, true);
                 if (grodValue != null)
                 {
+                    EditLoading = true;
                     editRichTextBox.Text = FormatTextForEdit(grodValue);
+                    EditLoading = false;
                 }
             }
         }
-        EditLoading = false;
     }
 
     private void PopulateTreeView(Grod GrodBase)
@@ -58,7 +60,7 @@ public partial class FormMain
             if (key.StartsWith('@'))
             {
                 TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "@", "@");
-                parentNode.Nodes.Add(new TreeNode { Name = key, Text = key });
+                parentNode.Nodes.Add(new TreeNode { Name = key, Text = key, Tag = key });
             }
             else if (key.Contains('.'))
             {
@@ -81,7 +83,8 @@ public partial class FormMain
                         childNode = new TreeNode
                         {
                             Name = string.Join('.', parts[..(index + 1)]),
-                            Text = parts[index]
+                            Text = parts[index],
+                            Tag = key
                         };
                         parentNode.Nodes.Add(childNode);
                     }
@@ -99,7 +102,7 @@ public partial class FormMain
             TreeNode parentNode = FindOrCreateNode(treeView.Nodes, "...", "...");
             foreach (var key in singleKeys)
             {
-                parentNode.Nodes.Add(new TreeNode { Name = key, Text = key });
+                parentNode.Nodes.Add(new TreeNode { Name = key, Text = key, Tag = key });
             }
         }
         treeView.ResumeLayout();

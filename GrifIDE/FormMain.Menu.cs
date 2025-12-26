@@ -88,7 +88,7 @@ public partial class FormMain
             return;
         }
         SetDirtyFlag(true);
-        editListBox.SelectedIndex = -1;
+        SetEditListBoxSelectedIndex(-1);
         editListBox.Items.Remove($"{item.Key} [{item.Action}]");
         EditItems.Remove(item);
     }
@@ -106,24 +106,26 @@ public partial class FormMain
             return;
         }
         newKey = newKey.Trim();
-        var item = EditItems.Where(x => x.Key == newKey).FirstOrDefault();
+        var item = EditItems.Where(x => x.Key.Equals(newKey, OIC)).FirstOrDefault();
         if (BaseGrod.ContainsKey(newKey, true) || (item != null && item.Action != "D"))
         {
             MessageBox.Show("Key already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
             return;
         }
-        SaveCurrentEdit();
-        editListBox.SelectedIndex = -1;
-        editRichTextBox.Clear();
         CurrentKey = null;
+        treeView.SelectedNode = null;
+        SetEditListBoxSelectedIndex(-1);
+        editRichTextBox.Clear();
         SetDirtyFlag(true);
+        var newKeyText = "";
         if (item != null)
         {
             item.Action = "C";
             item.Value = "";
             item.OldKey = null;
             editListBox.Items.Remove($"{newKey} [D]");
-            editListBox.Items.Add($"{newKey} [C]");
+            newKeyText = $"{newKey} [C]";
+            editListBox.Items.Add(newKeyText);
         }
         else
         {
@@ -133,9 +135,11 @@ public partial class FormMain
                 Action = "A",
                 Value = ""
             });
-            editListBox.Items.Add($"{newKey} [A]");
+            newKeyText = $"{newKey} [A]";
+            editListBox.Items.Add(newKeyText);
         }
-        editListBox.SelectedItem = newKey;
+        editListBox.SelectedItem = newKeyText;
+        editRichTextBox.Focus();
     }
 
     private void RenameMenuItem_Click(object? sender, EventArgs e)
@@ -166,7 +170,7 @@ public partial class FormMain
         var oldItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
         if (oldItem != null)
         {
-            editListBox.SelectedIndex = -1;
+            SetEditListBoxSelectedIndex(-1);
             editListBox.Items.Remove($"{oldItem.Key} [{oldItem.Action}]");
             editListBox.Items.Add($"{newKey} [R]");
             if (oldItem.Action != "R")
@@ -177,7 +181,7 @@ public partial class FormMain
             oldItem.Key = newKey;
             return;
         }
-        editListBox.SelectedIndex = -1;
+        SetEditListBoxSelectedIndex(-1);
         editListBox.Items.Add($"{newKey} [R]");
         EditItems.Add(new EditItem
         {
@@ -219,7 +223,7 @@ public partial class FormMain
                 MessageBox.Show("Failed to remove existing edit item.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
                 return;
             }
-            editListBox.SelectedIndex = -1;
+            SetEditListBoxSelectedIndex(-1);
             editListBox.Items.Remove($"{delKey} [{item.Action}]");
             SetDirtyFlag(true);
         }
@@ -231,7 +235,7 @@ public partial class FormMain
         item.Action = "D";
         item.Value = null;
         item.OldKey = null;
-        editListBox.SelectedIndex = -1;
+        SetEditListBoxSelectedIndex(-1);
         editListBox.Items.Add($"{delKey} [{item.Action}]");
         EditItems.Add(item);
         DirtyFlag = true;
@@ -310,10 +314,8 @@ public partial class FormMain
         }
         var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
         tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
-        EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
-        EditLoading = false;
     }
 
     private void NewMenuItem_Click(object? sender, EventArgs e)
@@ -377,10 +379,8 @@ public partial class FormMain
         }
         var tempText = item?.Value;
         tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
-        EditLoading = true;
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
-        EditLoading = false;
     }
 
     private void OptionsMenuItem_Click(object? sender, EventArgs e)

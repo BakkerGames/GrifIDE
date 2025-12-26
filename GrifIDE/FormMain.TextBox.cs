@@ -26,13 +26,14 @@ public partial class FormMain
         if (EditLoading) return;
         if (CurrentKey == null) return;
         var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        var editListText = $"{CurrentKey} [C]";
         if (tempItem != null)
         {
             if (tempItem.Action == "D")
             {
-                editListBox.Items.Remove($"{CurrentKey} [D]");
-                editListBox.Items.Add($"{CurrentKey} [C]");
                 tempItem.Action = "C";
+                editListBox.Items.Remove($"{CurrentKey} [D]");
+                editListBox.Items.Add(editListText);
             }
             tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
         }
@@ -44,18 +45,9 @@ public partial class FormMain
                 Key = CurrentKey,
                 Value = UnformatTextFromEdit(editRichTextBox.Text),
             });
-            editListBox.Items.Add($"{CurrentKey} [C]");
+            editListBox.Items.Add(editListText);
         }
+        editListBox.SelectedItem = editListText;
         DirtyFlag = true;
-    }
-
-    private void SaveCurrentEdit()
-    {
-        if (CurrentKey == null) return;
-        var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
-        if (tempItem != null)
-        {
-            tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
-        }
     }
 }

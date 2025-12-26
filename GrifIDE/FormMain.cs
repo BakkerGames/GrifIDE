@@ -86,7 +86,7 @@ public partial class FormMain : Form
                     }
                 }
                 editListBox.ResumeLayout();
-                this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
+                this.Text = $"{IDE_APP_TITLE} - {Path.GetFileName(Filename)}";
             }
         }
         catch (Exception)
@@ -116,7 +116,7 @@ public partial class FormMain : Form
     {
         DirtyFlag = flag;
         var changed = DirtyFlag ? "*" : "";
-        this.Text = $"GrifIDE - {Path.GetFileName(Filename)}{changed}";
+        this.Text = $"{IDE_APP_TITLE} - {Path.GetFileName(Filename)}{changed}";
 
     }
 }

@@ -24,23 +24,60 @@ public partial class FormMain
 
     private void EditListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (editListBox.SelectedIndex >= 0)
+        SetEditListBoxSelectedIndex(editListBox.SelectedIndex);
+    }
+
+    private void SetEditListBoxSelectedIndex(int index)
+    {
+        if (index < 0 && editListBox.SelectedIndex < 0)
         {
-            CurrentKey = editListBox.Items[editListBox.SelectedIndex]?.ToString()?.Split(' ')[0];
-            if (!string.IsNullOrEmpty(CurrentKey))
-            {
-                var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value ?? "";
-                EditLoading = true;
-                editRichTextBox.Clear();
-                editRichTextBox.Text = FormatTextForEdit(tempText);
-                EditLoading = false;
-            }
+            return;
         }
-        else
+        if (index < 0 || index >= editListBox.Items.Count)
+        {
+            CurrentKey = null;
+            editListBox.SelectedIndex = -1;
+            editRichTextBox.Clear();
+            return;
+        }
+        if (treeView.SelectedNode != null && (treeView.SelectedNode.Tag?.ToString() ?? "") != CurrentKey)
+        {
+            treeView.SelectedNode = null;
+        }
+        var newKey = GetEditListBoxSelectedKey();
+        if (newKey == CurrentKey)
+        {
+            return;
+        }
+        CurrentKey = null;
+        editRichTextBox.Clear();
+        editListBox.SelectedIndex = index;
+        var editListBoxText = editListBox.Items[editListBox.SelectedIndex];
+        if (editListBoxText == null || editListBoxText.ToString() == null)
         {
             CurrentKey = null;
             editRichTextBox.Clear();
+            return;
         }
+        CurrentKey = newKey;
+        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        editRichTextBox.Clear();
+        editRichTextBox.Text = FormatTextForEdit(item?.Value);
+        editRichTextBox.Focus();
+    }
+
+    private string? GetEditListBoxSelectedKey()
+    {
+        if (editListBox.SelectedIndex < 0 || editListBox.SelectedIndex >= editListBox.Items.Count)
+        {
+            return null;
+        }
+        var editListBoxText = (string?)editListBox.Items[editListBox.SelectedIndex];
+        if (editListBoxText == null)
+        {
+            return null;
+        }
+        return editListBoxText[..editListBoxText.LastIndexOf(" [")].Trim();
     }
 
     private void PopulateEditList(List<EditItem> EditItems)

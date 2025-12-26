@@ -82,7 +82,7 @@ public static class ConfigRoutines
     public static void SaveConfig()
     {
         // Save configuration settings to a file or other destination
-        ConfigGrod.Set("!__Version", VERSION);
+        ConfigGrod.Set("!Version", VERSION);
         ConfigGrod.Set("LastFilename", Filename ?? "");
         ConfigGrod.Set("TabWidth", TabWidth.ToString());
         ConfigGrod.Set("ShowControlCharacters", ShowControlCharacters.ToString().ToLower());

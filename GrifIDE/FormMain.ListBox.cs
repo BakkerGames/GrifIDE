@@ -1,4 +1,5 @@
-﻿using static GrifIDE.Common;
+﻿using static Grif.Common;
+using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
 
@@ -45,7 +46,7 @@ public partial class FormMain
             treeView.SelectedNode = null;
         }
         var newKey = GetEditListBoxSelectedKey();
-        if (newKey == CurrentKey)
+        if (newKey.Equals(CurrentKey, OIC))
         {
             return;
         }
@@ -60,7 +61,7 @@ public partial class FormMain
             return;
         }
         CurrentKey = newKey;
-        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        var item = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(item?.Value);
         editRichTextBox.Focus();

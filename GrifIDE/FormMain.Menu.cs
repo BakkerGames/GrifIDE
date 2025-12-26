@@ -1,6 +1,6 @@
 ﻿using Grif;
-using static Grif.IO;
 using static Grif.Common;
+using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
@@ -78,10 +78,16 @@ public partial class FormMain
 
     private void UneditMenuItem_Click(object? sender, EventArgs e)
     {
-        if (CurrentKey == null) { return; }
+        if (CurrentKey == null)
+        {
+            return;
+        }
         var response = MessageBox.Show($"Are you sure you want to discard changes for {CurrentKey}?", $"Unedit {CurrentKey}", MessageBoxButtons.YesNo);
-        if (response == DialogResult.No) { return; }
-        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        if (response == DialogResult.No)
+        {
+            return;
+        }
+        var item = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         if (item == null)
         {
             MessageBox.Show($"Key not found: {CurrentKey}", "Not Found", MessageBoxButtons.OK);
@@ -154,20 +160,20 @@ public partial class FormMain
             return;
         }
         newKey = newKey.Trim();
-        if (newKey == CurrentKey)
+        if (newKey.Equals(CurrentKey, OIC))
         {
             MessageBox.Show("Must enter a different key to rename", "Keys match", MessageBoxButtons.OK);
             return;
         }
-        var newItem = EditItems.Where(x => x.Key == newKey).FirstOrDefault();
-        var existingKey = BaseGrod.Keys(true, false).Where(x => x == newKey).FirstOrDefault();
+        var newItem = EditItems.Where(x => x.Key.Equals(newKey, OIC)).FirstOrDefault();
+        var existingKey = BaseGrod.Keys(true, false).Where(x => x.Equals(newKey, OIC)).FirstOrDefault();
         if (newItem != null || existingKey != null)
         {
             MessageBox.Show("New key already exists", "Error", MessageBoxButtons.OK);
             return;
         }
         SetDirtyFlag(true);
-        var oldItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        var oldItem = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         if (oldItem != null)
         {
             SetEditListBoxSelectedIndex(-1);
@@ -200,15 +206,15 @@ public partial class FormMain
             return;
         }
         delKey = delKey.Trim();
-        var item = EditItems.Where(x => x.Key == delKey).FirstOrDefault();
-        var existingKey = BaseGrod.Keys(true, false).Where(x => x == delKey).FirstOrDefault();
+        var item = EditItems.Where(x => x.Key.Equals(delKey, OIC)).FirstOrDefault();
+        var existingKey = BaseGrod.Keys(true, false).Where(x => x.Equals(delKey, OIC)).FirstOrDefault();
+        if (item == null && existingKey == null)
+        {
+            MessageBox.Show("Key does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
+            return;
+        }
         if (item == null)
         {
-            if (existingKey == null)
-            {
-                MessageBox.Show("Key does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
-                return;
-            }
             item = new EditItem
             {
                 Key = delKey,
@@ -223,10 +229,10 @@ public partial class FormMain
                 MessageBox.Show("Failed to remove existing edit item.", "Error", MessageBoxButtons.OK, MessageBoxIcon.None);
                 return;
             }
-            SetEditListBoxSelectedIndex(-1);
             editListBox.Items.Remove($"{delKey} [{item.Action}]");
-            SetDirtyFlag(true);
         }
+        SetDirtyFlag(true);
+        SetEditListBoxSelectedIndex(-1);
         if (item.Action == "R")
         {
             // If it was renamed, just cancel the rename
@@ -235,10 +241,14 @@ public partial class FormMain
         item.Action = "D";
         item.Value = null;
         item.OldKey = null;
-        SetEditListBoxSelectedIndex(-1);
+        if (CurrentKey?.Equals(delKey, OIC) ?? false)
+        {
+            editRichTextBox.Clear();
+            CurrentKey = null;
+            treeView.SelectedNode = null;
+        }
         editListBox.Items.Add($"{delKey} [{item.Action}]");
         EditItems.Add(item);
-        DirtyFlag = true;
     }
 
     private void PlayMenuItem_Click(object? sender, EventArgs e)
@@ -274,33 +284,6 @@ public partial class FormMain
         }
     }
 
-    private static void MergeEditItems(Grod grod)
-    {
-        if (grod == null)
-        {
-            return;
-        }
-        foreach (var editItem in EditItems)
-        {
-            if (editItem.Action == "A" || editItem.Action == "C")
-            {
-                grod.Set(editItem.Key, editItem.Value);
-                continue;
-            }
-            if (editItem.Action == "R")
-            {
-                grod.Remove(editItem.OldKey!, true);
-                grod.Set(editItem.Key, editItem.Value);
-                continue;
-            }
-            if (editItem.Action == "D")
-            {
-                grod.Remove(editItem.Key, true);
-                continue;
-            }
-        }
-    }
-
     private void ShowControlCharsMenuItem_Click(object? sender, EventArgs e)
     {
         ShowControlCharacters = !ShowControlCharacters;
@@ -312,7 +295,7 @@ public partial class FormMain
         {
             return;
         }
-        var tempText = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault()?.Value;
+        var tempText = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault()?.Value;
         tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
         editRichTextBox.Clear();
         editRichTextBox.Text = FormatTextForEdit(tempText);
@@ -372,7 +355,7 @@ public partial class FormMain
         {
             return;
         }
-        var item = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        var item = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         if (item == null)
         {
             return;
@@ -393,4 +376,35 @@ public partial class FormMain
     {
         MessageBox.Show("Help is not implemented yet.", "Help", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
+
+    #region Private Methods
+
+    private static void MergeEditItems(Grod grod)
+    {
+        if (grod == null)
+        {
+            return;
+        }
+        foreach (var editItem in EditItems)
+        {
+            if (editItem.Action == "A" || editItem.Action == "C")
+            {
+                grod.Set(editItem.Key, editItem.Value);
+                continue;
+            }
+            if (editItem.Action == "R")
+            {
+                grod.Remove(editItem.OldKey!, true);
+                grod.Set(editItem.Key, editItem.Value);
+                continue;
+            }
+            if (editItem.Action == "D")
+            {
+                grod.Remove(editItem.Key, true);
+                continue;
+            }
+        }
+    }
+
+    #endregion
 }

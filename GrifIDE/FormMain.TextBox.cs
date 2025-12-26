@@ -1,4 +1,5 @@
-﻿using static GrifIDE.Common;
+﻿using static Grif.Common;
+using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
 
@@ -25,7 +26,7 @@ public partial class FormMain
     {
         if (EditLoading) return;
         if (CurrentKey == null) return;
-        var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+        var tempItem = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         var editListText = $"{CurrentKey} [C]";
         if (tempItem != null)
         {

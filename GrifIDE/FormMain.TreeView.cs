@@ -1,4 +1,5 @@
 ﻿using Grif;
+using static Grif.Common;
 using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
@@ -29,7 +30,7 @@ public partial class FormMain
         if (treeView.SelectedNode != null && !string.IsNullOrEmpty(treeView.SelectedNode.Name))
         {
             CurrentKey = treeView.SelectedNode.Name;
-            var tempItem = EditItems.Where(x => x.Key == CurrentKey).FirstOrDefault();
+            var tempItem = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
             if (tempItem != null)
             {
                 EditLoading = true;

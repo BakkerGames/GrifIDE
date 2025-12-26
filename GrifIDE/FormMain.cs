@@ -1,4 +1,5 @@
 using System.Text.Json;
+using static Grif.Common;
 using static Grif.Dags;
 using static Grif.IO;
 using static GrifIDE.Common;
@@ -71,7 +72,7 @@ public partial class FormMain : Form
                     {
                         if (!ValidateScript(item.Value))
                         {
-                            if (!EditItems.Any(x => x.Key == item.Key))
+                            if (!EditItems.Any(x => x.Key.Equals(item.Key, OIC)))
                             {
                                 editListBox.Items.Add($"{item.Key} [C]");
                                 EditItems.Add(new EditItem

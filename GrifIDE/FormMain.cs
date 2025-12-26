@@ -13,6 +13,7 @@ public partial class FormMain : Form
     private TreeView treeView = new();
     private ListBox editListBox = new();
     private RichTextBox editRichTextBox = new();
+    private StatusStrip stripMain = new();
 
     public FormMain()
     {
@@ -23,6 +24,7 @@ public partial class FormMain : Form
     {
         LoadConfig();
         // Add in reverse order for proper placement
+        Controls.Add(stripMain);
         panelMain = new Panel
         {
             Dock = DockStyle.Fill
@@ -49,7 +51,7 @@ public partial class FormMain : Form
             if (File.Exists(filename))
             {
                 Filename = filename;
-                FilenameEdit = GetEditFilename();
+                FilenameEdit = GetEditFilename(filename);
                 SaveConfig();
                 var content = ReadGrif(Filename);
                 BaseGrod.Clear(true);
@@ -82,9 +84,9 @@ public partial class FormMain : Form
                             }
                         }
                     }
-                    this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
-                    editListBox.ResumeLayout();
                 }
+                editListBox.ResumeLayout();
+                this.Text = $"GrifIDE - {Path.GetFileName(Filename)}";
             }
         }
         catch (Exception)

@@ -19,7 +19,7 @@ public static class ConfigRoutines
         if (!string.IsNullOrEmpty(lastFile) && File.Exists(lastFile))
         {
             Filename = lastFile;
-            FilenameEdit = GetEditFilename();
+            FilenameEdit = GetEditFilename(lastFile);
         }
         if (int.TryParse(ConfigGrod.Get("TabWidth", true), out int tabWidth))
         {

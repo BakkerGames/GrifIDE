@@ -10,7 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <StartupObject>GrifIDE.Program</StartupObject>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.2025.1205</Version>
+    <Version>2.2025.1227</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GRIF2\grif\grif.csproj" />
+    <ProjectReference Include="..\..\grif2\grif\grif.csproj" />
   </ItemGroup>
 
 </Project>

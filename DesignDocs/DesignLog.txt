@@ -49,3 +49,6 @@ GRIF IDE Design Logs
 2025-12-26
 - Many bug fixes.
 - Use ".Equals()" for string key comparisons.
+
+2025.12.27
+- Switched to using GrifLib nuget package.

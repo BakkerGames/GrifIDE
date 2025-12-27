@@ -1,7 +1,7 @@
-﻿using static Grif.Common;
-using static GrifIDE.Common;
+﻿using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
+using static GrifLib.Common;
 
 namespace GrifIDE;
 
@@ -45,7 +45,7 @@ public partial class FormMain
         {
             treeView.SelectedNode = null;
         }
-        var newKey = GetEditListBoxSelectedKey();
+        var newKey = GetEditListBoxSelectedKey() ?? "";
         if (newKey.Equals(CurrentKey, OIC))
         {
             return;

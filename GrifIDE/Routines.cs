@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using Grif;
-using static Grif.Common;
+using GrifLib;
 using static GrifIDE.Common;
 using static GrifIDE.Options;
+using static GrifLib.Common;
 
 namespace GrifIDE;
 

@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using Grif;
-using static Grif.Common;
+using GrifLib;
 using static GrifIDE.Common;
+using static GrifLib.Common;
 
 namespace GrifIDE;
 

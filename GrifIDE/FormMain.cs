@@ -1,10 +1,10 @@
 using System.Text.Json;
-using static Grif.Common;
-using static Grif.Dags;
-using static Grif.IO;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Routines;
+using static GrifLib.Common;
+using static GrifLib.Dags;
+using static GrifLib.IO;
 
 namespace GrifIDE;
 

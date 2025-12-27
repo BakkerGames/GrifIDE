@@ -1,10 +1,10 @@
-﻿using Grif;
-using static Grif.Common;
-using static Grif.IO;
+﻿using GrifLib;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
+using static GrifLib.Common;
+using static GrifLib.IO;
 
 namespace GrifIDE;
 

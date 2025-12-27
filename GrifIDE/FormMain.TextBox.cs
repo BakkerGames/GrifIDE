@@ -1,7 +1,7 @@
-﻿using static Grif.Common;
-using static GrifIDE.Common;
+﻿using static GrifIDE.Common;
 using static GrifIDE.Options;
 using static GrifIDE.Routines;
+using static GrifLib.Common;
 
 namespace GrifIDE;
 

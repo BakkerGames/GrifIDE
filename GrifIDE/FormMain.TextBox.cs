@@ -36,7 +36,7 @@ public partial class FormMain
                 editListBox.Items.Remove($"{CurrentKey} [D]");
                 editListBox.Items.Add(editListText);
             }
-            tempItem.Value = UnformatTextFromEdit(editRichTextBox.Text);
+            tempItem.Value = editRichTextBox.Text;
         }
         else
         {
@@ -44,7 +44,7 @@ public partial class FormMain
             {
                 Action = "C",
                 Key = CurrentKey,
-                Value = UnformatTextFromEdit(editRichTextBox.Text),
+                Value = editRichTextBox.Text,
             });
             editListBox.Items.Add(editListText);
         }

@@ -30,23 +30,11 @@ public partial class FormMain
         if (treeView.SelectedNode != null && !string.IsNullOrEmpty(treeView.SelectedNode.Name))
         {
             CurrentKey = treeView.SelectedNode.Name;
-            var tempItem = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
-            if (tempItem != null)
-            {
-                EditLoading = true;
-                editRichTextBox.Text = FormatTextForEdit(tempItem.Value);
-                EditLoading = false;
-            }
-            else
-            {
-                var grodValue = BaseGrod.Get(CurrentKey, true);
-                if (grodValue != null)
-                {
-                    EditLoading = true;
-                    editRichTextBox.Text = FormatTextForEdit(grodValue);
-                    EditLoading = false;
-                }
-            }
+            var tempText = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault()?.Value;
+            tempText ??= FormatTextForEdit(BaseGrod.Get(CurrentKey, false) ?? "");
+            EditLoading = true;
+            editRichTextBox.Text = tempText;
+            EditLoading = false;
         }
     }
 

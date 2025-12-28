@@ -272,13 +272,15 @@ public partial class FormMain
         {
             MergeEditItems(BaseGrod);
             WriteGrif(Filename, BaseGrod.Items(true, true), false);
-            editRichTextBox.Text = "";
-            EditItems.Clear();
-            editListBox.Items.Clear();
             if (File.Exists(FilenameEdit))
             {
                 File.Delete(FilenameEdit);
             }
+            CurrentKey = null;
+            treeView.SelectedNode = null;
+            editRichTextBox.Text = "";
+            EditItems.Clear();
+            editListBox.Items.Clear();
             SetDirtyFlag(false);
             PopulateTreeView(BaseGrod);
         }
@@ -296,9 +298,9 @@ public partial class FormMain
             return;
         }
         var tempText = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault()?.Value;
-        tempText ??= BaseGrod.Get(CurrentKey, false) ?? "";
+        tempText ??= FormatTextForEdit(BaseGrod.Get(CurrentKey, false) ?? "");
         editRichTextBox.Clear();
-        editRichTextBox.Text = FormatTextForEdit(tempText);
+        editRichTextBox.Text = tempText;
     }
 
     private void NewMenuItem_Click(object? sender, EventArgs e)

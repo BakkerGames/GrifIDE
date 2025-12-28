@@ -63,7 +63,7 @@ public partial class FormMain
         CurrentKey = newKey;
         var item = EditItems.Where(x => x.Key.Equals(CurrentKey, OIC)).FirstOrDefault();
         editRichTextBox.Clear();
-        editRichTextBox.Text = FormatTextForEdit(item?.Value);
+        editRichTextBox.Text = item?.Value;
         editRichTextBox.Focus();
     }
 

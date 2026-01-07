@@ -10,7 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <StartupObject>GrifIDE.Program</StartupObject>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.2025.1227</Version>
+    <Version>2.2028.1.6</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="griflib" Version="2.2025.1227" />
+    <PackageReference Include="griflib" Version="2.2026.1.6" />
   </ItemGroup>
 
 </Project>

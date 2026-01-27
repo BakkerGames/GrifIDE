@@ -28,22 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBoxInput = new TextBox();
             richTextBoxOutput = new RichTextBox();
             SuspendLayout();
-            // 
-            // textBoxInput
-            // 
-            textBoxInput.AcceptsReturn = true;
-            textBoxInput.BackColor = Color.Black;
-            textBoxInput.Dock = DockStyle.Bottom;
-            textBoxInput.Font = new Font("Consolas", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBoxInput.ForeColor = Color.White;
-            textBoxInput.Location = new Point(0, 731);
-            textBoxInput.Name = "textBoxInput";
-            textBoxInput.Size = new Size(1184, 30);
-            textBoxInput.TabIndex = 0;
-            textBoxInput.KeyPress += TextBoxInput_KeyPress;
             // 
             // richTextBoxOutput
             // 
@@ -54,9 +40,8 @@
             richTextBoxOutput.Location = new Point(0, 0);
             richTextBoxOutput.Name = "richTextBoxOutput";
             richTextBoxOutput.ReadOnly = true;
-            richTextBoxOutput.Size = new Size(1184, 731);
+            richTextBoxOutput.Size = new Size(1184, 761);
             richTextBoxOutput.TabIndex = 1;
-            richTextBoxOutput.TabStop = false;
             richTextBoxOutput.Text = "";
             // 
             // FormPlay
@@ -65,18 +50,17 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 761);
             Controls.Add(richTextBoxOutput);
-            Controls.Add(textBoxInput);
+            KeyPreview = true;
             Name = "FormPlay";
             StartPosition = FormStartPosition.CenterParent;
             Text = "FormPlay";
             Shown += FormPlay_Shown;
+            KeyPress += FormPlay_KeyPress;
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private TextBox textBoxInput;
         private RichTextBox richTextBoxOutput;
     }
 }

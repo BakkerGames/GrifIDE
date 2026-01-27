@@ -1,4 +1,5 @@
-﻿using GrifLib;
+﻿using System.Text.Json;
+using GrifLib;
 using static GrifIDE.Common;
 using static GrifIDE.ConfigRoutines;
 using static GrifIDE.Options;
@@ -315,8 +316,14 @@ public partial class FormMain
         if (sfd.ShowDialog() == DialogResult.OK)
         {
             Filename = sfd.FileName;
-            BaseGrod = new Grod();
+            FilenameEdit = GetEditFilename(Filename);
+            ConfigGrod.Set("LastFilename", Filename);
             EditItems.Clear();
+            if (File.Exists(FilenameEdit))
+            {
+                EditItems = JsonSerializer.Deserialize<List<EditItem>>(File.ReadAllText(FilenameEdit)) ?? [];
+            }
+            BaseGrod = new Grod();
             editListBox.Items.Clear();
             editRichTextBox.Clear();
             SetDirtyFlag(false);
@@ -396,7 +403,10 @@ public partial class FormMain
             }
             if (editItem.Action == "R")
             {
-                grod.Remove(editItem.OldKey!, true);
+                if (editItem.OldKey != null)
+                {
+                    grod.Remove(editItem.OldKey, true);
+                }
                 grod.Set(editItem.Key, editItem.Value);
                 continue;
             }

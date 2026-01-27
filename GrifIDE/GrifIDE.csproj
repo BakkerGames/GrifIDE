@@ -10,7 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <StartupObject>GrifIDE.Program</StartupObject>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.2026.1.23</Version>
+    <Version>2.2026.1.26</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

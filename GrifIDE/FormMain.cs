@@ -14,7 +14,8 @@ public partial class FormMain : Form
     private TreeView treeView = new();
     private ListBox editListBox = new();
     private RichTextBox editRichTextBox = new();
-    private StatusStrip stripMain = new();
+    private readonly StatusStrip stripMain = new();
+    private FormPlay? formPlay = null;
 
     public FormMain()
     {
@@ -109,7 +110,14 @@ public partial class FormMain : Form
             else if (result == DialogResult.Cancel)
             {
                 e.Cancel = true;
+                return;
             }
+        }
+        if (formPlay != null)
+        {
+            formPlay.Close();
+            formPlay.Dispose();
+            formPlay = null;
         }
     }
 

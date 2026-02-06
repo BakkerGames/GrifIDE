@@ -254,7 +254,7 @@ public partial class FormMain
 
     private void PlayMenuItem_Click(object? sender, EventArgs e)
     {
-        var formPlay = new FormPlay
+        formPlay ??= new FormPlay
         {
             StartPosition = FormStartPosition.CenterParent,
             Text = BaseGrod.Get(GAMETITLE, true) ?? BaseGrod.Get(GAMENAME, true) ?? "Play Grif Game"
@@ -264,7 +264,8 @@ public partial class FormMain
         MergeEditItems(playGrod);
         formPlay.SetGrodBase(playGrod);
         formPlay.SetGrodOverlay(new Grod());
-        formPlay.Show();
+        formPlay.Clear();
+        formPlay.ShowDialog();
     }
 
     private void MergeMenuItem_Click(object? sender, EventArgs e)

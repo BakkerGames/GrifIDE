@@ -9,6 +9,7 @@ public partial class FormPlay : Form
 {
     private Grod grodBase = new();
     private Grod grodOverlay = new();
+    private IFGame? game = null;
     private int outputCount = 0;
     private long maxOutputWidth = 0;
     private static string tabChars = "    ";
@@ -48,9 +49,21 @@ public partial class FormPlay : Form
         grodOverlay.Parent = grodBase;
     }
 
+    public void Clear()
+    {
+        if (game != null)
+        {
+            game.InputEvent -= Input;
+            game.OutputEvent -= Output;
+        }
+        game = null;
+        _inputQueue.Clear();
+        richTextBoxOutput.Text = "";
+    }
+
     private async void FormPlay_Shown(object sender, EventArgs e)
     {
-        var game = new IFGame();
+        game = new IFGame();
         game.Initialize(grodBase, "savegame.sav");
         game.InputEvent += Input;
         game.OutputEvent += Output;
@@ -66,6 +79,10 @@ public partial class FormPlay : Form
         while (_inputQueue.Count == 0)
         {
             Application.DoEvents();
+            if (game?.GameOver ?? false)
+            {
+                return;
+            }
         }
         input = _inputQueue.Dequeue();
         OutputText(input + NL_CHAR);
@@ -192,5 +209,16 @@ public partial class FormPlay : Form
             inputBuffer += e.KeyChar;
             richTextBoxOutput.AppendText(e.KeyChar.ToString());
         }
+        else if (e.KeyChar == 0x16) // Ctrl-V
+        {
+            var clipText = Clipboard.GetText();
+            inputBuffer += clipText;
+            richTextBoxOutput.AppendText(clipText);
+        }
+    }
+
+    private void FormPlay_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        game?.GameOver = true;
     }
 }

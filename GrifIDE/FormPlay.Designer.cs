@@ -54,6 +54,7 @@
             Name = "FormPlay";
             StartPosition = FormStartPosition.CenterParent;
             Text = "FormPlay";
+            FormClosing += FormPlay_FormClosing;
             Shown += FormPlay_Shown;
             KeyPress += FormPlay_KeyPress;
             ResumeLayout(false);

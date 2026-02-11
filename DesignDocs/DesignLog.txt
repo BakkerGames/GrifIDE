@@ -56,3 +56,6 @@ GRIF IDE Design Logs
 2026-01-26
 - Working on bug fixes.
 - Writing BlankGame code and testing issues.
+
+2026-02-09
+- Get Wordwrap from GrifLib.IO

@@ -1,7 +1,7 @@
-﻿using System.Text;
-using GrifLib;
+﻿using GrifLib;
 using static GrifIDE.Common;
 using static GrifLib.Common;
+using static GrifLib.IO;
 
 namespace GrifIDE;
 
@@ -11,7 +11,7 @@ public partial class FormPlay : Form
     private Grod grodOverlay = new();
     private IFGame? game = null;
     private int outputCount = 0;
-    private long maxOutputWidth = 0;
+    private int maxOutputWidth = 0;
     private static string tabChars = "    ";
     private static bool uppercaseInput = false;
     private string inputBuffer = "";
@@ -35,7 +35,7 @@ public partial class FormPlay : Form
     public void SetGrodBase(Grod grod)
     {
         grodBase = grod;
-        maxOutputWidth = grodBase.GetNumber(OUTPUT_WIDTH, true) ?? 0;
+        maxOutputWidth = (int)(grodBase.GetNumber(OUTPUT_WIDTH, true) ?? 0);
         if ((grod.GetNumber(OUTPUT_TAB_LENGTH, true) ?? 0) > 0)
         {
             tabChars = new string(' ', (int)(grod.GetNumber(OUTPUT_TAB_LENGTH, true) ?? 4));
@@ -118,64 +118,32 @@ public partial class FormPlay : Form
             var index = text.IndexOf(NL_CHAR);
             var before = text[..index];
             text = text[(index + 2)..];
-            var lines = Wordwrap(before);
+            var lines = Wordwrap(before, outputCount, maxOutputWidth);
             foreach (var line in lines)
             {
                 richTextBoxOutput.AppendText(line);
                 richTextBoxOutput.AppendText(Environment.NewLine);
+                outputCount = 0;
             }
-            outputCount = 0;
         }
         if (!string.IsNullOrEmpty(text))
         {
-            var lines = Wordwrap(text);
+            var lines = IO.Wordwrap(text, outputCount, maxOutputWidth);
             for (int i = 0; i < lines.Count - 1; i++)
             {
                 var line = lines[i];
                 richTextBoxOutput.AppendText(line);
                 richTextBoxOutput.AppendText(Environment.NewLine);
+                outputCount = 0;
             }
             if (lines.Count > 0)
             {
                 var lastLine = lines[^1];
                 richTextBoxOutput.AppendText(lastLine);
+                outputCount = lastLine.Length;
             }
         }
         richTextBoxOutput.ScrollToCaret();
-    }
-
-    private List<string> Wordwrap(string text)
-    {
-        if (maxOutputWidth <= 0 || string.IsNullOrEmpty(text) || outputCount + text.Length <= maxOutputWidth)
-        {
-            return [text];
-        }
-        List<string> result = [];
-        StringBuilder currentLine = new();
-        // TODO ### this needs better spaces handling
-        var words = text.Split(' ');
-        foreach (var word in words)
-        {
-            if (outputCount + word.Length + 1 > maxOutputWidth)
-            {
-                // output current line
-                result.Add(currentLine.ToString());
-                currentLine.Clear();
-                outputCount = 0;
-            }
-            if (currentLine.Length > 0)
-            {
-                currentLine.Append(' ');
-                outputCount++;
-            }
-            currentLine.Append(word);
-            outputCount += word.Length;
-        }
-        if (currentLine.Length > 0)
-        {
-            result.Add(currentLine.ToString());
-        }
-        return result;
     }
 
     private void FormPlay_KeyPress(object sender, KeyPressEventArgs e)
